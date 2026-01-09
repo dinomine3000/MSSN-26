@@ -1,10 +1,6 @@
 package hello;
 
 import processing.core.PApplet;
-import triangle.ChaosGameApp;
-import lindemayer.ForestApp;
-import logistic.LogisticFunctionApp;
-import mandelbrot.MandelbrotApp;
 
 public class ProcessingSetup extends PApplet{
 
@@ -57,7 +53,7 @@ public class ProcessingSetup extends PApplet{
 		//app = new LogisticFunctionApp(); //app da exploração da função logística da Parte A 
 		//app = new ChaosGameApp(); //app do jogo do caos da Parte B
 		//app = new ForestApp(); //app da criação de uma floresta de árvores fractais da Parte C
-		app = new MandelbrotApp(); //app da exploração do set de mandelbrot da Parte D
+		//app = new MandelbrotApp(); //app da exploração do set de mandelbrot da Parte D
 		//app = new TestCA();
 		PApplet.main(ProcessingSetup.class);
 	}

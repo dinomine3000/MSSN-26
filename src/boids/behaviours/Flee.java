@@ -1,0 +1,19 @@
+package boids.behaviours;
+
+import boids.Boid;
+import physics.Body;
+import processing.core.PVector;
+
+public class Flee extends Behaviour {
+
+	public Flee(float weight) {
+		super(weight);
+	}
+	
+	public PVector getDesiredVelocity(Boid me) {
+		Body bodyTarget = me.eye.target;
+		PVector vd = PVector.sub(bodyTarget.getPos(), me.getPos());
+		return vd.mult(-1);
+	}
+
+}

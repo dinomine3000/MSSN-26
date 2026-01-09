@@ -1,0 +1,18 @@
+package boids.behaviours;
+
+import boids.Boid;
+import physics.Body;
+import processing.core.PVector;
+
+public class Seek extends Behaviour {
+
+	public Seek(float weight) {
+		super(weight);
+	}
+	
+	public PVector getDesiredVelocity(Boid me) {
+		Body bodyTarget = me.eye.target;
+		return PVector.sub(bodyTarget.getPos(), me.getPos()).normalize().mult(me.dna.maxSpeed);
+	}
+
+}
