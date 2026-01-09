@@ -10,7 +10,7 @@ public class Cell {
 	protected int row, col;
 	protected int state;
 	protected Cell[] neighbours;
-	protected int w, h;
+	protected float w, h;
 	
 	public Cell(CellularAutomata au, int row, int col) {
 		
@@ -61,11 +61,9 @@ public class Cell {
 	
 	public void display(PApplet p) {
 		p.pushStyle();
-		p.fill(au.neighbourStateColors(state,neighboursNum()));
-		p.stroke(255);
-		p.rect(col * w, row * h + au.getOffsetY(), w, h);
-		p.stroke(0);
-		p.ellipseMode(PConstants.CORNER);
+		p.fill(au.getStateColors()[state]);
+		p.rect(au.xmin + col * w, au.ymin + row * h, w, h);
+		//p.ellipseMode(PConstants.CORNER);
 		p.popStyle();
 	}
 	

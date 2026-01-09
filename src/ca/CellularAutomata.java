@@ -1,45 +1,50 @@
 package ca;
 
+import hello.SubPlot;
 import processing.core.PApplet;
 
 public class CellularAutomata {
 	
-	protected int nrows, ncols, nStates, radiusNeigh, w, h;
+	protected int nrows, ncols, nStates, radiusNeigh;
 	protected Cell[][] cells;
-	protected boolean moore;
 	protected int[] colors;
-	protected PApplet p;
 	protected int offsetY = 0;
+	private float cellWidth, cellHeight;
+	public float xmin, ymin;
+	private SubPlot plt;
 	
-	public CellularAutomata(PApplet p, int nrows, int ncols, int nStates, int radiusNeigh, boolean moore) {
-		
-		this.p = p;
+	public CellularAutomata(PApplet p, SubPlot plt, int nrows, int ncols, int nStates, int radiusNeigh) {
 		this.nrows = nrows;
 		this.ncols = ncols;
 		this.nStates = nStates;
 		this.radiusNeigh = radiusNeigh;
-		this.moore = moore;
-		w = p.width/ncols;
-		h = p.height/nrows;
+
+		this.plt = plt;
+		float[] bb = plt.getBoundingBox();
+		xmin = bb[0];
+		ymin = bb[1];
+		cellWidth = bb[2]/ncols;
+		cellHeight = bb[3]/nrows;
+		
 		cells = new Cell[nrows][ncols];
-		createCells();
 		colors = new int[nStates];
+		setRandomStateColors(p);
+		createCells();
+	}
+	
+	private void setRandomStateColors(PApplet p) {
+		for(int i = 0; i < nStates; i++) {
+			colors[i] = p.color(p.random(255), p.random(255), p.random(255));
+		}
 	}
 	
 	protected void createCells() {
-		
 		for(int i = 0; i < nrows; i++) {
 			for(int j = 0; j < ncols; j++) {
 				cells[i][j] = new Cell(this, i, j);
 			}
 		}
-		if(moore) setMoreNeighbours();
-		else setNeighbours4();
-	}
-	
-	private void setNeighbours4() {
-		// TODO Auto-generated method stub
-		
+		setMooreNeighbours();
 	}
 	
 	public Cell getCellGrid(int row, int col) {
@@ -48,13 +53,13 @@ public class CellularAutomata {
 	
     public void setRandomStates() {
         for(int i = 0; i < nrows; i++) {
-            for(int j = 0; i < ncols; j++) {
-                cells[i][j].setState((int) p.random(nStates));
+            for(int j = 0; j < ncols; j++) {
+                cells[i][j].setState((int) (Math.random() * nStates));
             }
         }
     }
 	
-	public void setMoreNeighbours() {
+	public void setMooreNeighbours() {
 		for(int i = 0; i < nrows; i++) {
 			for (int j = 0; j < ncols; j++) {
 				Cell[] neigh = new Cell[(int) Math.pow(2 * radiusNeigh + 1, 2)];
@@ -78,60 +83,35 @@ public class CellularAutomata {
             }
         }
 	}
-	
-	public int neighbourStateColors(int state, int Neighbours){
-
-		switch (state){
-			case 0:
-				return p.color(0);
-			case 1:
-				switch (Neighbours){
-					case 1:
-						return p.color(160,32,240); //roxo
-					case 2:
-						return p.color(0,0,255); //azul
-					case 3:
-						return p.color(0,255,255); //ciano
-					case 4:
-						return p.color(0,255,0); //verde
-					case 5:
-						return p.color(255,255,0); //amarelo
-					case 6:
-						return p.color(255,165,0); //laranja
-					case 7:
-						return p.color(255,0,0); //vermelho
-					case 8:
-						return p.color(255);
-				}
-		}
-		return p.color(0);
-	}
-
-    public void setStateColors(int[] colors) {
-        this.colors = colors;
-    }
 
     public int[] getStateColors() {
         return colors;
     }
 
-    public int getCelulaWidth() {
-        return w;
+    public float getCelulaWidth() {
+        return cellWidth;
     }
 
-    public int getCelulaHeight() {
-        return h;
+    public float getCelulaHeight() {
+        return cellHeight;
     }
 
     public int getNumberOfStates() {
         return nStates;
     }
+    
+    public Cell world2Cell(double x, double y) {
+    	float[] xy = plt.getPixelCoord(x, y);
+    	return getCell(xy[0], xy[1]);
+    }
 
-    public Cell getCell(int x, int y) {
-        int row = y/h;
-        int col = x/h;
+    public Cell getCell(float x, float y) {
+        int row = (int)((y-ymin)/cellHeight);
+        int col = (int)((x-xmin)/cellWidth);
         if(row >= nrows) row = nrows - 1;
         if(col >= ncols) col = ncols - 1;
+        if(row < 0) row = 0;
+        if(col < 0) col = 0;
 
         return cells[row][col];
     }
@@ -139,7 +119,7 @@ public class CellularAutomata {
     public void setRandomBinaryStates(float prob) {
     	for(int i = 0; i < nrows; i++) {
 			for (int j = 0; j < ncols; j++) {
-				boolean b = p.random(1f) < prob;
+				boolean b = Math.random() < prob;
 				int s = b ? 1 : 0;
 				cells[i][j].setState(s);
 			}
@@ -154,7 +134,7 @@ public class CellularAutomata {
         return offsetY;
     }
 
-    public void display() {
+    public void display(PApplet p) {
         for(int i = 0; i < nrows; i++) {
             for(int j = 0; j < ncols; j++) {
                 cells[i][j].display(p);

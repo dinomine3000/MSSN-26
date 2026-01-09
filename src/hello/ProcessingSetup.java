@@ -1,5 +1,6 @@
 package hello;
 
+import ca.TestCA;
 import processing.core.PApplet;
 
 public class ProcessingSetup extends PApplet{
@@ -47,14 +48,7 @@ public class ProcessingSetup extends PApplet{
 	}
 	
 	public static void main(String[] args) {
-		//app = new DLAApp();
-		//app = new GOL();
-		//app = new TP0App();
-		//app = new LogisticFunctionApp(); //app da exploração da função logística da Parte A 
-		//app = new ChaosGameApp(); //app do jogo do caos da Parte B
-		//app = new ForestApp(); //app da criação de uma floresta de árvores fractais da Parte C
-		//app = new MandelbrotApp(); //app da exploração do set de mandelbrot da Parte D
-		//app = new TestCA();
+		app = new TestCA();
 		PApplet.main(ProcessingSetup.class);
 	}
 }
