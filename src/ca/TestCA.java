@@ -11,13 +11,14 @@ public class TestCA implements IProcessingApp {
     private int radiusNeigh = 2;
     private boolean pause = false;
     private SubPlot plt;
-    private double[] window = {0, 10, 0,10};
-    private float[] viewport = {0.2f, 0.2f, 0.6f, 0.6f};
+    private double[] window = {0, 10, 0, 10};
+    private float[] viewport = {0.2f, 0f, 0.6f, 0.6f};
     CellularAutomata ca;
 
     @Override
     public void setup(PApplet p) {
-    	plt = new SubPlot(window, viewport, p.width, p.height);
+    	//plt = new SubPlot(window, viewport, p.width, p.height);
+    	plt = SubPlot.getPlotAt(p, 0f, 0f, 0.5f, 0.4f, window);
         ca = new MajorityCa(p, plt, nrows, ncols, nStates, radiusNeigh);
         //ca = new CellularAutomata(p, plt, nrows, ncols, nStates, radiusNeigh);
         ca.setRandomStates();

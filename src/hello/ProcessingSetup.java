@@ -1,6 +1,7 @@
 package hello;
 
 import ca.TestCA;
+import ecosystem.TestTerrainApp;
 import processing.core.PApplet;
 
 public class ProcessingSetup extends PApplet{
@@ -48,7 +49,7 @@ public class ProcessingSetup extends PApplet{
 	}
 	
 	public static void main(String[] args) {
-		app = new TestCA();
+		app = new TestTerrainApp();
 		PApplet.main(ProcessingSetup.class);
 	}
 }

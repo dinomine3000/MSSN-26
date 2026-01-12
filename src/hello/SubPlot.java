@@ -1,5 +1,8 @@
 package hello;
 
+import ecosystem.WorldConstants;
+import processing.core.PApplet;
+
 public class SubPlot 
 {		
 	private double[] window;
@@ -18,6 +21,42 @@ public class SubPlot
 		my = -viewport[3] * fullheight / (window[3] - window[2]);
 		by = (1 - viewport[1]) * fullheight;
 	}
+	
+	/**
+	 * funcao para facilitar a criacao de um subplot.
+	 * definimos 2 pontos, P1 e P2, os cantos superior esquerdo e inferior direito, respetivamente, e a janela total que sera adaptada dentro desta regiao
+	 * P1 e P2 são definidos como percentagens (entre 0 e 1) da janela inteira, então 0.2 no x1 significa 20% de distancia da borda esquerda
+	 * @param p
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @param window
+	 * @return
+	 */
+    public static SubPlot getPlotAt(PApplet p, float x1, float y1, float x2, float y2, double[] window) {
+    	if(x2 < x1) {
+    		float t = x1;
+    		x1 = x2;
+    		x2 = t;
+    	}
+    	if(y2 < y1) {
+    		float t = y1;
+    		y1 = y2;
+    		y2 = t;
+    	}
+    	
+    	float width = x2 - x1;
+    	float height = y2 - y1;
+    	
+    	return getPlotForDrawingAt(p, x1, y1, width, height, window);
+    }
+    
+    private static SubPlot getPlotForDrawingAt(PApplet p, float posXpercent, float posYpercent, float widthPercent, float heightPercent, double[] window) {
+    	float[] viewport = new float[] {posXpercent, 1 - heightPercent - posYpercent, widthPercent, heightPercent};
+    	return new SubPlot(window, viewport, p.width, p.height);
+    }
+
 	
 	public float[] getPixelCoord(double x, double y)
 	{

@@ -2,6 +2,7 @@ package ca;
 
 import hello.SubPlot;
 import processing.core.PApplet;
+import processing.core.PVector;
 
 public class CellularAutomata {
 	
@@ -36,6 +37,10 @@ public class CellularAutomata {
 		for(int i = 0; i < nStates; i++) {
 			colors[i] = p.color(p.random(255), p.random(255), p.random(255));
 		}
+	}
+
+	public void setStateColors(int[] colors) {
+		this.colors = colors;
 	}
 	
 	protected void createCells() {
@@ -98,6 +103,13 @@ public class CellularAutomata {
 
     public int getNumberOfStates() {
         return nStates;
+    }
+
+    public PVector getCenterCell(int row, int col){
+        float x = (col + 0.5f) * cellWidth;
+        float y = (row + 0.5f) * cellHeight;
+        double[] w = plt.getWorldCoord(x,y);
+        return new PVector((float)w[0], (float)w[1]);
     }
     
     public Cell world2Cell(double x, double y) {

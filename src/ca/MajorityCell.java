@@ -2,7 +2,7 @@ package ca;
 
 import hello.Histogram;
 
-public class MajorityCell extends  Cell{
+public class MajorityCell extends Cell{
 
     private Histogram hist;
 

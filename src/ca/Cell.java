@@ -61,6 +61,7 @@ public class Cell {
 	
 	public void display(PApplet p) {
 		p.pushStyle();
+		p.noStroke();
 		p.fill(au.getStateColors()[state]);
 		p.rect(au.xmin + col * w, au.ymin + row * h, w, h);
 		//p.ellipseMode(PConstants.CORNER);
