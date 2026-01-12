@@ -12,13 +12,11 @@ public class Evade extends Behaviour{
 
 	@Override
 	public PVector getDesiredVelocity(Boid me) {
-		Body target = me.eye.target;
-		float dist = PVector.sub(me.getPos(), target.getPos()).mag();
-		PVector d = target.getVel().mult(me.dna.deltaTPursuit);
-		PVector tar = PVector.add(target.getPos(), d);
-		PVector vd = PVector.sub(tar,  me.getPos());
-		float mag = (float) (1/Math.pow(dist, 4));
-		return vd.mult(-1*me.dna.maxSpeed);
+		Body bodyTarget = me.eye.target;
+		PVector d = bodyTarget.getVel().mult(me.dna.deltaTPursuit);
+		PVector target = PVector.add(bodyTarget.getPos(), d);
+		PVector vd = PVector.sub(target, me.getPos());
+		return vd.mult(-1);
 		//return vd.mult(-1*Math.min(mag, me.dna.maxSpeed));
 	}
 

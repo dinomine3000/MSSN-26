@@ -14,10 +14,9 @@ public class Arrive extends Behaviour {
 	public PVector getDesiredVelocity(Boid me) {
 		PVector vd = PVector.sub(me.eye.target.getPos(), me.getPos());
 		float dist = vd.copy().mag();
-		vd = vd.normalize().mult(me.dna.maxSpeed);
 		float R = me.dna.radiusArrive;
 		if (dist < R) {
-			vd.mult((float)(Math.pow(dist/R, k)));
+			vd.mult(dist/R);
 		}
 		return vd;
 	}

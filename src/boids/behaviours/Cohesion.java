@@ -17,7 +17,7 @@ public class Cohesion extends Behaviour{
 			target.add(b.getPos());		
 		}
 		target.div(me.eye.getFarSight().size()+1);
-		return PVector.sub(target, me.getPos()).mult(me.dna.maxSpeed);
+		return PVector.sub(target, me.getPos());
 	}
 
 }

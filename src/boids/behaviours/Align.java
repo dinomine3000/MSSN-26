@@ -17,7 +17,7 @@ public class Align extends Behaviour {
 		for(Body b : me.eye.getFarSight()) {
 			vd.add(b.getVel());
 		}
-		return vd.div(me.eye.getFarSight().size()+1).mult(me.dna.maxSpeed);
+		return vd.div(me.eye.getFarSight().size()+1);
 	}
 
 }

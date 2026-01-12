@@ -19,7 +19,7 @@ public class Separate extends Behaviour{
 			r.div(d*d);
 			vd.add(r);
 		}
-		return vd.mult(me.dna.maxSpeed);
+		return vd;
 	}
 
 }
