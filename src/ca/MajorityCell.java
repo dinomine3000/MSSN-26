@@ -1,6 +1,6 @@
 package ca;
 
-import hello.Histogram;
+import util.Histogram;
 
 public class MajorityCell extends Cell{
 

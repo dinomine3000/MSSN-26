@@ -16,7 +16,12 @@ public class Eye {
 	public Eye(Boid me, List<Body> trackBodies) {
 		this.me = me;
 		this.trackBodies = trackBodies;
-		target =  this.trackBodies.get(0);
+		if(trackBodies.size() > 0) target =  this.trackBodies.get(0);
+	}
+	
+	public Eye(Boid me, Eye other) {
+		this(me, other.trackBodies);
+		target = other.target;
 	}
 	
 	public void look() {

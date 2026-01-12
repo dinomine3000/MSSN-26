@@ -3,6 +3,7 @@ package ca;
 import hello.SubPlot;
 import processing.core.PApplet;
 import processing.core.PVector;
+import util.CustomRandomGenerator;
 
 public class CellularAutomata {
 	
@@ -31,6 +32,23 @@ public class CellularAutomata {
 		colors = new int[nStates];
 		setRandomStateColors(p);
 		createCells();
+	}
+	
+	public void initRandom() {
+		for(int i = 0; i < nrows; i++) {
+			for(int j = 0; j < ncols; j++) {
+				cells[i][j].setState((int)(nStates*Math.random()));
+			}
+		}
+	}
+	
+	public void initRandom(double[] pmf) {
+		CustomRandomGenerator crg = new CustomRandomGenerator(pmf);
+		for(int i = 0; i < nrows; i++) {
+			for(int j = 0; j < ncols; j++) {
+				cells[i][j].setState(crg.getRandomClass());
+			}
+		}
 	}
 	
 	private void setRandomStateColors(PApplet p) {

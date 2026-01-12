@@ -16,16 +16,37 @@ public class DNA {
 	
 	
 	public DNA() {
-		maxSpeed = random(3, 5);
-		maxForce = random(10, 20);
-		visionDistance = random(3, 8);
+		//phyics
+		maxSpeed = random(1f, 2f);
+		maxForce = random(4f, 7f);
+		//vision
+		visionDistance = random(1.5f, 2.5f);
 		visionSafeDistance = 0.25f * visionDistance;
-		visionAngle = (float)Math.PI;
-		deltaTPursuit = random(0.5f, 1);
-		radiusArrive = 3f;
-		deltaTWander = random(1f, 1f);
-		radiusWander = random(3, 3);
-		deltaPhiWander = (float)Math.PI/4;
+		visionAngle = (float)Math.PI * 0.2f;
+		//pursuit
+		deltaTPursuit = random(0.5f, 1f);
+		//arive
+		radiusArrive = random(3f, 5f);
+		//wander
+		deltaTWander = random(0.3f, 0.6f);
+		radiusWander = random(1f, 3f);
+		deltaPhiWander = (float)Math.PI/8;
+	}
+	
+	public DNA(DNA dna) {
+		maxSpeed = dna.maxSpeed;
+		maxForce = dna.maxForce;
+		
+		visionDistance = dna.visionDistance;
+		visionSafeDistance = dna.visionSafeDistance;
+		visionAngle = dna.visionAngle;
+		
+		deltaTPursuit = dna.deltaTPursuit;
+		radiusArrive = dna.radiusArrive;
+		
+		deltaTWander = dna.deltaPhiWander;
+		deltaPhiWander = dna.deltaPhiWander;
+		radiusWander = dna.radiusWander;
 	}
 	
 	public static float random(float min, float max) {

@@ -1,4 +1,4 @@
-package hello;
+package util;
 
 public class Histogram {
     int[] hist;

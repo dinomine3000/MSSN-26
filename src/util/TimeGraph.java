@@ -1,5 +1,6 @@
-package hello;
+package util;
 
+import hello.SubPlot;
 import processing.core.PApplet;
 
 public class TimeGraph {

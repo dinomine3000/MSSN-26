@@ -17,7 +17,7 @@ public class Boid extends Body{
 	private PShape shape;
 	public DNA dna;
 	public Eye eye;
-	private List<Behaviour> behaviours;
+	protected List<Behaviour> behaviours;
 	public float phiWander;
 	private double[] window;
 	private float sumWeights;
@@ -89,7 +89,8 @@ public class Boid extends Body{
 	}
 	
 	public void applyBehaviour(int i, float dt) {
-		eye.look();
+		if(eye != null)
+			eye.look();
 		
 		Behaviour beh = behaviours.get(i);
 		PVector vd = beh.getDesiredVelocity(this);
@@ -97,7 +98,8 @@ public class Boid extends Body{
 	}
 	
 	public void applyBehaviours(float dt) {
-		eye.look();
+		if(eye != null)
+			eye.look();
 		
 		PVector vd = new PVector();
 		for (Behaviour beh: behaviours) {
