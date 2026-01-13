@@ -3,6 +3,7 @@ package boids;
 import java.util.ArrayList;
 import java.util.List;
 
+import boids.behaviours.AvoidObstacle;
 import boids.behaviours.Behaviour;
 import hello.SubPlot;
 import physics.Body;
@@ -71,9 +72,8 @@ public class Boid extends Body{
 	private void sumWeights() {
 		sumWeights = 0;
 		
-		for(Behaviour b : behaviours) {
+		for(Behaviour b : behaviours)
 			sumWeights += b.getWeight();
-		}
 	}
 	
 	public void addBehaviour(Behaviour beh) {
@@ -98,24 +98,21 @@ public class Boid extends Body{
 	}
 	
 	public void applyBehaviours(float dt) {
-		if(eye != null)
-			eye.look();
-		
-		PVector vd = new PVector();
-		for (Behaviour beh: behaviours) {
-			PVector vdd = beh.getDesiredVelocity(this);
-			vdd.mult(beh.getWeight()/sumWeights);
-			vd.add(vdd);
-		}
-		move(dt, vd);
+        if (eye != null) eye.look();
+        PVector vd = new PVector();
+        for (Behaviour behavior : behaviours) {
+            PVector vdd = behavior.getDesiredVelocity(this);
+            vdd.mult(behavior.getWeight() / sumWeights);
+            vd.add(vdd);
+        }
+        move(dt, vd);
 	}
 	
 	private void move(float dt, PVector vd) {
-		float vdMag = vd.mag();
-		vd = vd.normalize().mult(Math.min(this.dna.maxSpeed, vdMag));
-		PVector fs = PVector.sub(vd, vel);
-		applyForce(fs.limit(dna.maxForce));
-		super.move(dt);
+        vd.normalize().mult(dna.maxSpeed);
+        PVector fs = PVector.sub(vd, vel);
+        applyForce(fs.limit(dna.maxForce));
+        super.move(dt);
 
         if(pos.x < window[0])
             pos.x += window[1] - window[0];
@@ -144,6 +141,20 @@ public class Boid extends Body{
 		this.debug = debug;
 	}
 
+	public void mutateBehaviours() {
+		for(Behaviour b: behaviours) {
+			if(b instanceof AvoidObstacle) {
+				b.weight += DNA.random(-0.5f, 0.5f);
+				b.weight = Math.max(0,  b.weight);
+			}
+		}
+		sumWeights();
+	}
+	
+	public List<Behaviour> getBehaviours(){
+		return behaviours;
+	}
+	
 	public DNA getDNA() {
 		return this.dna;
 	}

@@ -3,7 +3,7 @@ package boids.behaviours;
 import processing.core.PVector;
 
 public abstract class Behaviour implements IBehaviour{
-	private float weight;
+	public float weight;
 	
 	public Behaviour(float weight) {
 		setWeight(weight);

@@ -14,6 +14,10 @@ public class Body extends Mover {
 		this.color = color;
 	}
 
+	public Body(PVector centerCell) {
+		super(centerCell, new PVector(), 0f);
+	}
+
 	public void display(PApplet p, SubPlot plt) {
 		p.pushStyle();
 		float[] pp = plt.getPixelCoord(pos.x, pos.y);

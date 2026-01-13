@@ -35,4 +35,17 @@ public class Terrain extends MajorityCa {
             }
         }
     }
+    
+    public List<Body> getObstacles(){
+    	List<Body> bodies = new ArrayList<Body>();
+    	for(int i = 0; i < nrows; i++) {
+    		for(int j = 0; j < ncols; j++) {
+    			if(cells[i][j].getState() == WorldConstants.PatchType.OBSTACLE.ordinal()) {
+    				Body b = new Body(this.getCenterCell(i, j));
+    				bodies.add(b);
+    			}
+    		}
+    	}
+    	return bodies;
+    }
 }
