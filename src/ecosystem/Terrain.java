@@ -3,6 +3,7 @@ package ecosystem;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.CellBodyProxy;
 import ca.MajorityCa;
 import hello.SubPlot;
 import physics.Body;
@@ -18,10 +19,14 @@ public class Terrain extends MajorityCa {
         int minRT = (int)(WorldConstants.REGENERATION_TIME[0]*1000);
         int maxRT = (int)(WorldConstants.REGENERATION_TIME[1]*1000);
 
+        int minST = (int)(WorldConstants.SPOILAGE_TIME[0]*1000);
+        int maxST = (int)(WorldConstants.SPOILAGE_TIME[1]*1000);
+
         for(int i = 0; i < nrows; i++){
             for(int j = 0; j < ncols; j++){
                 int timeToGrow = (int)(minRT + (maxRT - minRT) * Math.random());
-                cells[i][j] = new Patch(this, i, j, timeToGrow);
+                int timeToSpoil = (int)(minST + (maxST - minST) * Math.random());
+                cells[i][j] = new Patch(this, i, j, timeToGrow, timeToSpoil);
             }
         }
         setMooreNeighbours();
@@ -31,17 +36,25 @@ public class Terrain extends MajorityCa {
     public void regenerate(){
         for(int i = 0; i < nrows; i++){
             for (int j = 0; j < ncols; j++){
-                ((Patch)cells[i][j]).regenerate();
+                ((Patch)cells[i][j]).regenerate(this);
             }
         }
     }
     
-    public List<Body> getObstacles(){
-    	List<Body> bodies = new ArrayList<Body>();
+    public void spoil() {
+        for(int i = 0; i < nrows; i++){
+            for (int j = 0; j < ncols; j++){
+                ((Patch)cells[i][j]).spoil(this);
+            }
+        }
+    }
+    
+    public List<CellBodyProxy> getCells(int patchType){
+    	List<CellBodyProxy> bodies = new ArrayList<CellBodyProxy>();
     	for(int i = 0; i < nrows; i++) {
     		for(int j = 0; j < ncols; j++) {
-    			if(cells[i][j].getState() == WorldConstants.PatchType.OBSTACLE.ordinal()) {
-    				Body b = new Body(this.getCenterCell(i, j));
+    			if(cells[i][j].getState() == patchType) {
+    				CellBodyProxy b = new CellBodyProxy(this.getCenterCell(i, j), patchType);
     				bodies.add(b);
     			}
     		}

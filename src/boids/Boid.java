@@ -5,6 +5,7 @@ import java.util.List;
 
 import boids.behaviours.AvoidObstacle;
 import boids.behaviours.Behaviour;
+import boids.behaviours.SmellDetection;
 import hello.SubPlot;
 import physics.Body;
 import processing.core.PApplet;
@@ -17,7 +18,7 @@ public class Boid extends Body{
 	private SubPlot plt;
 	private PShape shape;
 	public DNA dna;
-	public Eye eye;
+	public Eye<? extends Body> eye;
 	protected List<Behaviour> behaviours;
 	public float phiWander;
 	private double[] window;
@@ -35,7 +36,7 @@ public class Boid extends Body{
 		behaviours = new ArrayList<Behaviour>();
 	}
 	
-	public void setEye(Eye eye) {
+	public void setEye(Eye<? extends Body> eye) {
 		this.eye = eye;
 	}
 
@@ -145,6 +146,10 @@ public class Boid extends Body{
 		for(Behaviour b: behaviours) {
 			if(b instanceof AvoidObstacle) {
 				b.weight += DNA.random(-0.5f, 0.5f);
+				b.weight = Math.max(0,  b.weight);
+			}
+			if(b instanceof SmellDetection) {
+				b.weight += DNA.random(-0.2f, 0.2f);
 				b.weight = Math.max(0,  b.weight);
 			}
 		}

@@ -10,12 +10,12 @@ public class TestEcosystemApp implements IProcessingApp {
 	
 	private float timeDuration = 60;
     private final float refPopulation = 720;
-    private final float refMeanMaxSpeed = 1f;
-    private final float refStdMaxSpeed = 0.2f;
+    private final float refSmell = 1f;
+    private final float refImmune = 1f;
 
     private final double[] winGraph1 = {0, timeDuration, 0, 2 * refPopulation};
-    private final double[] winGraph2 = {0,timeDuration, 0, 2*refMeanMaxSpeed};
-    private final double[] winGraph3 = {0,timeDuration, 0, 2*refStdMaxSpeed};
+    private final double[] winGraph2 = {0,timeDuration, 0, 2*refSmell};
+    private final double[] winGraph3 = {0,timeDuration, 0, 2*refImmune};
     
     private TimeGraph t1, t2, t3;
 	
@@ -33,8 +33,8 @@ public class TestEcosystemApp implements IProcessingApp {
 		pltG3 = SubPlot.getPlotAt(p, 0.6f, 0.6f, 1f, 0.8f, winGraph3);
 
 		t1 = new TimeGraph(p, pltG1, p.color(255, 0, 0), refPopulation);
-		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), refMeanMaxSpeed);
-		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), refStdMaxSpeed);
+		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), refSmell);
+		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), refImmune);
 		
 		terrain = new Terrain(p, plt);
 		terrain.setStateColors(getColors(p));
@@ -62,23 +62,30 @@ public class TestEcosystemApp implements IProcessingApp {
 		timer += dt;
 	
 		terrain.regenerate();
+		terrain.spoil();
 		population.update(dt, terrain);
 		
 		terrain.display(p);
 		population.display(p, plt);
 		
 		if(timer > updateGraphTime) {
+			int preyId = WorldConstants.PREY_ID;
+			int scavId = WorldConstants.SCAV_ID;
+
+			int popPrey = population.getNumAnimals(preyId);
+			int popScav = population.getNumAnimals(scavId);
+			float avgSmellPrey = population.getMeanSmellWeight(preyId);
+			float avgSmellScav = population.getMeanSmellWeight(scavId);
+			float avgImmunePrey = population.getMeanImmuneWeight(preyId);
+			float avgImmuneScav = population.getMeanImmuneWeight(scavId);
 			System.out.println(String.format("Time = %ds", (int)timer));
-			System.out.println("numAnimals = " + population.getNumAnimals());
-			System.out.println("meanMaxSpeed = " + population.getMeanMaxSpeed());
-			System.out.println("StdMaxSpeed = " + population.getStdMaxSpeed());
-			float[] weights = population.getMeanWeights();
-			System.out.println("meanWeightWander = " + weights[0] + 
-					"\nmeanWeightAvoid = " + weights[1]);
+			System.out.println("number of prey = " + popPrey + "\nnumber of scavengers = " + popScav);
+			System.out.println("Average smell of pre = " + avgSmellPrey + "\nAverage smell of scavenger= " + avgSmellScav);
+			System.out.println("Average immune of pre = " + avgImmunePrey + "\nAverage immune of scavenger= " + avgImmuneScav);
 			System.out.println("");
 			t1.plot(timer,  population.getNumAnimals());
-			t2.plot(timer,  population.getMeanMaxSpeed());
-			t3.plot(timer,  population.getStdMaxSpeed());
+			t2.plot(timer,  population.getMeanSmellWeight());
+			t3.plot(timer,  population.getMeanImmuneWeight());
 			updateGraphTime = timer + intervalUpdate;
 		}
 		
@@ -94,11 +101,11 @@ public class TestEcosystemApp implements IProcessingApp {
 
 		winGraph2[0] = timer;
 		winGraph2[1] = timer + timeDuration;
-		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), refMeanMaxSpeed);
+		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), refSmell);
 
 		winGraph3[0] = timer;
 		winGraph3[1] = timer + timeDuration;
-		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), refStdMaxSpeed);
+		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), refImmune);
 		
 	}
 

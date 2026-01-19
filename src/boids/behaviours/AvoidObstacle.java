@@ -1,6 +1,8 @@
 package boids.behaviours;
 
 import boids.Boid;
+import ca.CellBodyProxy;
+import ecosystem.WorldConstants;
 import physics.Body;
 import processing.core.PVector;
 
@@ -21,6 +23,7 @@ public class AvoidObstacle extends Behaviour{
 	
 	private float hasObstacle(Boid me) {
 		for (Body body: me.eye.getFarSight()) {
+			if(body instanceof CellBodyProxy patch && patch.getState() != WorldConstants.PatchType.OBSTACLE.ordinal()) continue;
 			PVector r = PVector.sub(body.getPos(), me.getPos());
 			PVector vd = new PVector(me.getVel().y, -me.getVel().x);
 			return PVector.dot(vd,  r);

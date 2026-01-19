@@ -9,23 +9,16 @@ import hello.SubPlot;
 import java.util.List;
 
 public class Prey extends Animal{
-
-    private final PApplet p;
-    private final SubPlot plt;
-
-    public Prey(PVector pos, float mass, float radius, int color, PApplet parent, SubPlot plt) {
-        super(pos, mass, radius, color, parent, plt);
-        this.p = parent;
-        this.plt = plt;
+    public Prey(PVector pos, float mass, float radius, int color, PApplet parent, SubPlot plt, int id) {
+        super(pos, mass, radius, color, parent, plt, id);
         energy = WorldConstants.INI_PREY_ENERGY;
     }
 
     public Prey(Prey prey, boolean mutate, PApplet p, SubPlot plt){
         super(prey, mutate, p, plt);
-        this.p = p;
-        this.plt = plt;
         energy = WorldConstants.INI_PREY_ENERGY;
     }
+
 
     @Override
     public void eat(Terrain terrain){
@@ -34,8 +27,13 @@ public class Prey extends Animal{
             energy += WorldConstants.ENERGY_FROM_PLANT;
             patch.setFertile();
         }
+        if(patch.getState() == WorldConstants.PatchType.SPOILED.ordinal()){
+            energy += Math.min(WorldConstants.ENERGY_FROM_PLANT, 
+            		-WorldConstants.ENERGY_FROM_PLANT + this.dna.immuneSystem*WorldConstants.ENERGY_FROM_PLANT * WorldConstants.SPOILED_MULTIPLIER);
+            patch.setFertile();
+        }
     }
-
+    
     @Override
     public Animal reproduce(boolean mutate){
         Animal child = null;

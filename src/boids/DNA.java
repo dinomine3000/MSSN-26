@@ -14,6 +14,9 @@ public class DNA {
 	public float radiusWander;
 	public float deltaPhiWander;
 	
+	public float smellStrength;
+	public float immuneSystem;
+	
 	
 	public DNA() {
 		//phyics
@@ -31,6 +34,9 @@ public class DNA {
 		deltaTWander = random(0.3f, 0.6f);
 		radiusWander = random(1f, 3f);
 		deltaPhiWander = (float)Math.PI/8;
+
+		smellStrength = random(-1f, 1f);
+		immuneSystem = random(0f, 1f);
 	}
 	
 	public DNA(DNA dna, boolean mutate) {
@@ -48,12 +54,20 @@ public class DNA {
 		deltaPhiWander = dna.deltaPhiWander;
 		radiusWander = dna.radiusWander;
 		
+		smellStrength = dna.smellStrength;
 		if(mutate) mutate();
 	}
 	
 	private void mutate() {
 		maxSpeed += random(-0.2f, 0.2f);
 		maxSpeed = Math.max(0, maxSpeed);
+		
+		smellStrength += random(-1f, 1f);
+		smellStrength = Math.max(-10, smellStrength);
+		smellStrength = Math.min(10, smellStrength);
+
+		immuneSystem += random(-1f, 1f);
+		immuneSystem = Math.max(0, immuneSystem);
 	}
 
 	public static float random(float min, float max) {
