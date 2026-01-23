@@ -34,7 +34,7 @@ public class DNA {
 		radiusWander = random(1f, 3f);
 		deltaPhiWander = (float)Math.PI/8;
 
-		smellStrength = random(-1f, 1f);
+		smellStrength = random(-2f, 2f);
 	}
 	
 	public DNA(DNA dna, boolean mutate) {

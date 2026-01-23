@@ -37,8 +37,8 @@ public class Population {
 					WorldConstants.PREY_COLOR[2]);
 			Animal a = new Prey(pos, WorldConstants.PREY_MASS, WorldConstants.PREY_SIZE, color, p, plt, WorldConstants.PREY_ID);
 			a.addBehaviour(new Wander(1));
-			a.addBehaviour(new AvoidObstacle(0));
-			a.addBehaviour(new SmellDetection(0));
+			//a.addBehaviour(new AvoidObstacle(0));
+			a.addBehaviour(new SmellDetection(1));
 			Eye<CellBodyProxy> eye = new Eye<>(a, obstacles);
 			a.setEye(eye);
 			allAnimals.add(a);
@@ -52,8 +52,8 @@ public class Population {
 					WorldConstants.SCAV_COLOR[2]);
 			Animal a = new Scavenger(pos, WorldConstants.SCAV_MASS, WorldConstants.SCAV_SIZE, color, p, plt, WorldConstants.SCAV_ID);
 			a.addBehaviour(new Wander(1));
-			a.addBehaviour(new AvoidObstacle(0));
-			a.addBehaviour(new SmellDetection(0));
+			//a.addBehaviour(new AvoidObstacle(0));
+			a.addBehaviour(new SmellDetection(1));
 			Eye<CellBodyProxy> eye = new Eye<>(a, obstacles);
 			a.setEye(eye);
 			allAnimals.add(a);
@@ -109,6 +109,7 @@ public class Population {
 	public int getNumAnimals(int id) {
 		return getAnimalsOfId(id).size();
 	}
+	
 	public float getMeanSmellWeight() {return getMeanSmellWeight(-1);}
 	
 	public float getMeanSmellWeight(int id) {
@@ -118,15 +119,6 @@ public class Population {
 		return sum / getNumAnimals(id);
 	}
 	
-	public float getMeanImmuneWeight() {return getMeanImmuneWeight(-1);}
-
-	public float getMeanImmuneWeight(int id) {
-		float sum = 0;
-		for(Animal a: getAnimalsOfId(id))
-			sum += 1;
-		return sum / getNumAnimals(id);
-	}
-
 	public float[] getMeanWeights() {
 		float[] sums = new float[2];
 		for(Animal a: allAnimals) {
@@ -137,5 +129,8 @@ public class Population {
 		sums[1] /= allAnimals.size();
 		return sums;
 	}
+	
+	public float getPreyNumber() {return getNumAnimals(1);}
+	public float getScavNumber() {return getNumAnimals(2);}
 
 }

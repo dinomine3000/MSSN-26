@@ -6,10 +6,10 @@ import processing.core.PApplet;
 import util.TimeGraph;
 
 public class TestEcosystemApp implements IProcessingApp {
-	private SubPlot plt, pltG1, pltG2, pltG3;
+	private SubPlot plt, pltG1, pltG2;
 	
 	private float timeDuration = 60;
-    private final float refPopulation = 720;
+    private final float refPopulation = 720f;
     private final float refSmell = 1f;
     private final float refImmune = 1f;
 
@@ -30,11 +30,11 @@ public class TestEcosystemApp implements IProcessingApp {
 		plt = SubPlot.getPlotAt(p, 0, 0, 0.6f, 1, WorldConstants.WINDOW);
 		pltG1 = SubPlot.getPlotAt(p, 0.6f, 0f, 1f, 0.2f, winGraph1);
 		pltG2 = SubPlot.getPlotAt(p, 0.6f, 0.3f, 1f, 0.5f, winGraph2);
-		pltG3 = SubPlot.getPlotAt(p, 0.6f, 0.6f, 1f, 0.8f, winGraph3);
+		//pltG3 = SubPlot.getPlotAt(p, 0.6f, 0.6f, 1f, 0.8f, winGraph3);
 
 		t1 = new TimeGraph(p, pltG1, p.color(255, 0, 0), refPopulation);
 		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), refSmell);
-		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), refImmune);
+		//t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), refImmune);
 		
 		terrain = new Terrain(p, plt);
 		terrain.setStateColors(getColors(p));
@@ -76,16 +76,12 @@ public class TestEcosystemApp implements IProcessingApp {
 			int popScav = population.getNumAnimals(scavId);
 			float avgSmellPrey = population.getMeanSmellWeight(preyId);
 			float avgSmellScav = population.getMeanSmellWeight(scavId);
-			float avgImmunePrey = population.getMeanImmuneWeight(preyId);
-			float avgImmuneScav = population.getMeanImmuneWeight(scavId);
 			System.out.println(String.format("Time = %ds", (int)timer));
 			System.out.println("number of prey = " + popPrey + "\nnumber of scavengers = " + popScav);
-			System.out.println("Average smell of pre = " + avgSmellPrey + "\nAverage smell of scavenger= " + avgSmellScav);
-			System.out.println("Average immune of pre = " + avgImmunePrey + "\nAverage immune of scavenger= " + avgImmuneScav);
+			System.out.println("Average smellSense of prey = " + avgSmellPrey + "\nAverage smellSense of scavenger= " + avgSmellScav);
 			System.out.println("");
 			t1.plot(timer,  population.getNumAnimals());
 			t2.plot(timer,  population.getMeanSmellWeight());
-			t3.plot(timer,  population.getMeanImmuneWeight());
 			updateGraphTime = timer + intervalUpdate;
 		}
 		
@@ -102,10 +98,6 @@ public class TestEcosystemApp implements IProcessingApp {
 		winGraph2[0] = timer;
 		winGraph2[1] = timer + timeDuration;
 		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), refSmell);
-
-		winGraph3[0] = timer;
-		winGraph3[1] = timer + timeDuration;
-		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), refImmune);
 		
 	}
 

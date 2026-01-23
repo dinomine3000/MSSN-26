@@ -3,7 +3,7 @@ package util;
 public class Histogram {
     int[] hist;
     int nbins;
-
+    
     public Histogram(int[] data, int nbins){
         this.nbins = nbins;
         hist = new int[nbins];
@@ -11,11 +11,11 @@ public class Histogram {
             hist[data[i]]++;
         }
     }
-
+    
     public int[] getDistribution(){
         return hist;
     }
-
+    
     public int getMode(int preference){
         int maxVal = 0;
         int mode = 0;
@@ -26,10 +26,10 @@ public class Histogram {
             }
         }
         if (hist[preference] == hist[mode])
-            return preference;
+            return preference; // if it is a draw decides for preference
         return mode;
     }
-
+    
     public void display(){
         for(int i = 0; i < nbins; i++){
             System.out.println(hist[i]);
