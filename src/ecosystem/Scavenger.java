@@ -26,8 +26,7 @@ public class Scavenger extends Animal {
             patch.setFertile();
         }
         if(patch.getState() == WorldConstants.PatchType.SPOILED.ordinal()){
-            energy += Math.min(WorldConstants.SCAV_ENERGY_FROM_PLANT, 
-            		-WorldConstants.SCAV_ENERGY_FROM_PLANT + this.dna.immuneSystem*WorldConstants.SCAV_ENERGY_FROM_PLANT * WorldConstants.SPOILED_MULTIPLIER);
+            energy += -WorldConstants.ENERGY_FROM_PLANT;
             patch.setFertile();
         }
     }

@@ -28,8 +28,7 @@ public class Prey extends Animal{
             patch.setFertile();
         }
         if(patch.getState() == WorldConstants.PatchType.SPOILED.ordinal()){
-            energy += Math.min(WorldConstants.ENERGY_FROM_PLANT, 
-            		-WorldConstants.ENERGY_FROM_PLANT + this.dna.immuneSystem*WorldConstants.ENERGY_FROM_PLANT * WorldConstants.SPOILED_MULTIPLIER);
+            energy += -WorldConstants.ENERGY_FROM_PLANT;
             patch.setFertile();
         }
     }

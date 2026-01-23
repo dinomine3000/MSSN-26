@@ -123,7 +123,7 @@ public class Population {
 	public float getMeanImmuneWeight(int id) {
 		float sum = 0;
 		for(Animal a: getAnimalsOfId(id))
-			sum += a.getDNA().immuneSystem;
+			sum += 1;
 		return sum / getNumAnimals(id);
 	}
 

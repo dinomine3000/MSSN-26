@@ -15,7 +15,6 @@ public class DNA {
 	public float deltaPhiWander;
 	
 	public float smellStrength;
-	public float immuneSystem;
 	
 	
 	public DNA() {
@@ -36,7 +35,6 @@ public class DNA {
 		deltaPhiWander = (float)Math.PI/8;
 
 		smellStrength = random(-1f, 1f);
-		immuneSystem = random(0f, 1f);
 	}
 	
 	public DNA(DNA dna, boolean mutate) {
@@ -65,9 +63,6 @@ public class DNA {
 		smellStrength += random(-1f, 1f);
 		smellStrength = Math.max(-10, smellStrength);
 		smellStrength = Math.min(10, smellStrength);
-
-		immuneSystem += random(-1f, 1f);
-		immuneSystem = Math.max(0, immuneSystem);
 	}
 
 	public static float random(float min, float max) {
