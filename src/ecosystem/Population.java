@@ -38,7 +38,7 @@ public class Population {
 			Animal a = new Prey(pos, WorldConstants.PREY_MASS, WorldConstants.PREY_SIZE, color, p, plt, WorldConstants.PREY_ID);
 			a.addBehaviour(new Wander(1));
 			//a.addBehaviour(new AvoidObstacle(0));
-			a.addBehaviour(new SmellDetection(1));
+			a.addBehaviour(new SmellDetection(Math.abs(a.dna.smellStrength)));
 			Eye<CellBodyProxy> eye = new Eye<>(a, obstacles);
 			a.setEye(eye);
 			allAnimals.add(a);
@@ -53,7 +53,7 @@ public class Population {
 			Animal a = new Scavenger(pos, WorldConstants.SCAV_MASS, WorldConstants.SCAV_SIZE, color, p, plt, WorldConstants.SCAV_ID);
 			a.addBehaviour(new Wander(1));
 			//a.addBehaviour(new AvoidObstacle(0));
-			a.addBehaviour(new SmellDetection(1));
+			a.addBehaviour(new SmellDetection(Math.abs(a.dna.smellStrength)));
 			Eye<CellBodyProxy> eye = new Eye<>(a, obstacles);
 			a.setEye(eye);
 			allAnimals.add(a);

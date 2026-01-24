@@ -22,7 +22,7 @@ public class DNA {
 		maxSpeed = random(1f, 2f);
 		maxForce = random(4f, 7f);
 		//vision
-		visionDistance = random(1.5f, 2.5f);
+		visionDistance = random(3.f, 5.f);
 		visionSafeDistance = 0.25f * visionDistance;
 		visionAngle = (float)Math.PI * 0.3f;
 		//pursuit
