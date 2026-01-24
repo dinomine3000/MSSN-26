@@ -15,21 +15,22 @@ import java.util.List;
 
 public abstract class Animal extends Boid implements IAnimal{
     protected float energy;
-    protected PImage img;
     protected final PApplet p;
     protected final SubPlot plt;
     protected int id;
+    protected PImage img;
 
-    protected Animal(PVector pos, float mass, float radius, int color, PApplet p, SubPlot plt, int id){
+    protected Animal(PVector pos, float mass, float radius, int color, PApplet p, SubPlot plt, int id, PImage img){
         super(pos, mass, radius, color, p, plt);
         this.p = p;
         this.plt = plt;
         this.id = id;
+        this.img = img;
     }
     
 
     protected Animal(Animal a, boolean mutate, PApplet p, SubPlot plt){
-        this(a.pos, a.mass, a.radius, a.color, p, plt, a.id);
+        this(a.pos, a.mass, a.radius, a.color, p, plt, a.id, a.img);
         for(Behaviour b: a.behaviours){
             this.addBehaviour(b);
         }
@@ -53,4 +54,8 @@ public abstract class Animal extends Boid implements IAnimal{
     public boolean die(){
         return (energy < 0);
     }
+    
+    public void setImg(PImage img) {
+		this.img = img;
+	}
 }

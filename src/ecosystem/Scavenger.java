@@ -2,15 +2,15 @@ package ecosystem;
 
 import hello.SubPlot;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 
 public class Scavenger extends Animal {
-    public Scavenger(PVector pos, float mass, float radius, int color, PApplet parent, SubPlot plt, int id) {
-        super(pos, mass, radius, color, parent, plt, id);
+    public Scavenger(PVector pos, float mass, float radius, int color, PApplet parent, SubPlot plt, int id, PImage img) {
+        super(pos, mass, radius, color, parent, plt, id, img);
         energy = WorldConstants.INI_SCAV_ENERGY;
         this.dna.maxSpeed *= 2; 
     }
-
 
 	protected Scavenger(Animal a, boolean mutate, PApplet p, SubPlot plt) {
 		super(a, mutate, p, plt);
@@ -43,4 +43,10 @@ public class Scavenger extends Animal {
         }
         return child;
     }
+    
+    public void display(PApplet p, SubPlot plt) {
+		float[] pp = plt.getPixelCoord(pos.x, pos.y);
+		//a,b coordenadas da imagem x,y  ;   c,d largura e altura de cada imagem
+		p.image(img, pp[0]-15f, pp[1]-15f, 20f, 20f);
+	}
 }

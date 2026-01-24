@@ -9,8 +9,8 @@ import hello.SubPlot;
 import java.util.List;
 
 public class Prey extends Animal{
-    public Prey(PVector pos, float mass, float radius, int color, PApplet parent, SubPlot plt, int id) {
-        super(pos, mass, radius, color, parent, plt, id);
+    public Prey(PVector pos, float mass, float radius, int color, PApplet parent, SubPlot plt, int id, PImage img) {
+        super(pos, mass, radius, color, parent, plt, id, img);
         energy = WorldConstants.INI_PREY_ENERGY;
     }
 
@@ -43,4 +43,11 @@ public class Prey extends Animal{
         }
         return child;
     }
+    
+    @Override
+	public void display(PApplet p, SubPlot plt) {
+		float[] pp = plt.getPixelCoord(pos.x, pos.y);
+		//a,b coordenadas da imagem x,y  ;   c,d largura e altura de cada imagem
+		p.image(img, pp[0]-15f, pp[1]-15f, 30f, 30f);
+	}
 }

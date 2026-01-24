@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import boids.Eye;
-import boids.behaviours.AvoidObstacle;
+//import boids.behaviours.AvoidObstacle;
 import boids.behaviours.SmellDetection;
 import boids.behaviours.Wander;
 import ca.CellBodyProxy;
 import hello.SubPlot;
-import physics.Body;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 
 public class Population {
@@ -18,7 +18,15 @@ public class Population {
 	private double[] window;
 	private boolean mutate = true;
 	
+	protected PImage imgRabbit, imgRaccoon;
+	protected List<PImage> images = new ArrayList<>();
+	
 	public Population(PApplet p, SubPlot plt, Terrain terrain) {
+		imgRabbit = p.loadImage("rabbit.png");
+		images.add(imgRabbit);
+		imgRaccoon = p.loadImage("raccoon.png");
+		images.add(imgRaccoon);
+		
 		window = plt.getWindow();
 		allAnimals = new ArrayList<Animal>();
 
@@ -35,7 +43,7 @@ public class Population {
 					WorldConstants.PREY_COLOR[0],
 					WorldConstants.PREY_COLOR[1],
 					WorldConstants.PREY_COLOR[2]);
-			Animal a = new Prey(pos, WorldConstants.PREY_MASS, WorldConstants.PREY_SIZE, color, p, plt, WorldConstants.PREY_ID);
+			Animal a = new Prey(pos, WorldConstants.PREY_MASS, WorldConstants.PREY_SIZE, color, p, plt, WorldConstants.PREY_ID, imgRabbit);
 			a.addBehaviour(new Wander(1));
 			//a.addBehaviour(new AvoidObstacle(0));
 			a.addBehaviour(new SmellDetection(Math.abs(a.dna.smellStrength)));
@@ -50,7 +58,7 @@ public class Population {
 					WorldConstants.SCAV_COLOR[0],
 					WorldConstants.SCAV_COLOR[1],
 					WorldConstants.SCAV_COLOR[2]);
-			Animal a = new Scavenger(pos, WorldConstants.SCAV_MASS, WorldConstants.SCAV_SIZE, color, p, plt, WorldConstants.SCAV_ID);
+			Animal a = new Scavenger(pos, WorldConstants.SCAV_MASS, WorldConstants.SCAV_SIZE, color, p, plt, WorldConstants.SCAV_ID, imgRaccoon);
 			a.addBehaviour(new Wander(1));
 			//a.addBehaviour(new AvoidObstacle(0));
 			a.addBehaviour(new SmellDetection(Math.abs(a.dna.smellStrength)));
