@@ -42,6 +42,21 @@ public class TestEcosystemApp implements IProcessingApp {
 		for(int i = 0; i<2; i++) terrain.majorityRule();
 		population = new Population(p, plt, terrain);
 		
+		
+		widthSize = (float) ((p.width * 0.7)/Variables.NCOLS);
+		heightSize = (float) ((p.height * 0.7)/Variables.NROWS);
+
+		plt = new SubPlot(Variables.WINDOW, viewportDebug, p.width, p.height);
+		pltInBetween = new SubPlot(winInBetween, viewInBetween, p.width, p.height);
+		pltGraph1 = new SubPlot(winGraph1, viewGraph1, p.width, p.height);
+		pltGraph2 = new SubPlot(winGraph2, viewGraph2, p.width, p.height);
+		pltGraph3 = new SubPlot(winGraph3, viewGraph3, p.width, p.height);
+
+		tg1 = new TimeGraph(p, pltGraph1, p.color(255, 0, 0), refPopulation);
+		tg2 = new TimeGraph(p, pltGraph2, p.color(255, 0, 0), refPred);
+		tg3 = new TimeGraph(p, pltGraph3, p.color(255, 0, 0), refPrey);
+		
+		
 		timer = 0;
 		updateGraphTime = timer + intervalUpdate;
 	}

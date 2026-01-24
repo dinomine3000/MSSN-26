@@ -47,7 +47,7 @@ public class Prey extends Animal{
     @Override
 	public void display(PApplet p, SubPlot plt) {
 		float[] pp = plt.getPixelCoord(pos.x, pos.y);
-		//a,b coordenadas da imagem x,y  ;   c,d largura e altura de cada imagem
+		//coordenadas da imagem: x,y  e  largura e altura de cada imagem: w,h;
 		p.image(img, pp[0]-15f, pp[1]-15f, 30f, 30f);
 	}
 }
