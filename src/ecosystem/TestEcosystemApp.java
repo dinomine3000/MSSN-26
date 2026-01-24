@@ -78,7 +78,7 @@ public class TestEcosystemApp implements IProcessingApp {
 			float avgSmellScav = population.getMeanSmellWeight(scavId);
 			System.out.println(String.format("Time = %ds", (int)timer));
 			System.out.println("number of prey = " + popPrey + "\nnumber of scavengers = " + popScav);
-			System.out.println("Average smellSense of prey = " + avgSmellPrey + "\nAverage smellSense of scavenger= " + avgSmellScav);
+			//System.out.println("Average smellSense of prey = " + avgSmellPrey + "\nAverage smellSense of scavenger= " + avgSmellScav);
 			System.out.println("");
 			t1.plot(timer,  population.getNumAnimals());
 			t2.plot(timer,  population.getMeanSmellWeight());
