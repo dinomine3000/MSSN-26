@@ -6,6 +6,7 @@ import java.util.List;
 import boids.behaviours.AvoidObstacle;
 import boids.behaviours.Behaviour;
 import boids.behaviours.SmellDetection;
+import boids.behaviours.Wander;
 import hello.SubPlot;
 import physics.Body;
 import processing.core.PApplet;
@@ -144,9 +145,9 @@ public class Boid extends Body{
 
 	public void mutateBehaviours() {
 		for(Behaviour b: behaviours) {
-			if(b instanceof AvoidObstacle) {
-				b.weight += DNA.random(-0.5f, 0.5f);
-				b.weight = Math.max(0,  b.weight);
+			if(b instanceof Wander) {
+				b.weight += DNA.random(-0.2f, 0.2f);
+				b.weight = Math.max(1,  b.weight);
 			}
 			if(b instanceof SmellDetection) {
 				b.weight += DNA.random(-0.2f, 0.2f);

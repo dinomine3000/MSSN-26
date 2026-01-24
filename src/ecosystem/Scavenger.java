@@ -28,7 +28,7 @@ public class Scavenger extends Animal {
         }
         */
         if(patch.getState() == WorldConstants.PatchType.SPOILED.ordinal()){
-            energy += WorldConstants.ENERGY_FROM_PLANT;
+            energy += WorldConstants.SCAV_ENERGY_FROM_PLANT;
             patch.setFertile();
         }
     }
