@@ -11,14 +11,21 @@ import ca.CellBodyProxy;
 import hello.SubPlot;
 import physics.Body;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 
 public class Population {
 	private List<Animal> allAnimals;
 	private double[] window;
 	private boolean mutate = true;
+	private PImage imgRabbit, imgRaccoon;
 	
 	public Population(PApplet p, SubPlot plt, Terrain terrain) {
+		imgRabbit = p.loadImage("rabbit.png");
+		images.add(imgRabbit);
+		imgRaccoon = p.loadImage("raccoon.png");
+		images.add(imgRaccoon);
+		
 		window = plt.getWindow();
 		allAnimals = new ArrayList<Animal>();
 
