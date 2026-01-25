@@ -36,6 +36,14 @@ public class TimeGraph {
 		p.rect(bb[0], bb[1], bb[2], bb[3]);
 
 		p.stroke(0);
+		
+		//draw 10 second markers
+		for(int i = 0; i < window[1]; i += 10) {
+			float[] lineStart = plt.getPixelCoord(i, 0);
+			float[] lineEnd = plt.getPixelCoord(i, 10);
+			p.line(lineStart[0], lineStart[1], lineEnd[0], lineEnd[1]);
+		}
+		
 		float[] ri = plt.getPixelCoord(window[0], ref);
 		float[] rf = plt.getPixelCoord(window[1], ref);
 		p.line(ri[0], ri[1], rf[0], rf[1]);

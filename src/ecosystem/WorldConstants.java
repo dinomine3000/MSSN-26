@@ -11,22 +11,22 @@ public class WorldConstants {
     public enum PatchType{
         EMPTY, OBSTACLE, FERTILE, FOOD, SPOILED
     }
-    public final static double[] PATCH_TYPE_PROB = {0.3f, 0f, 0f, 0.4f, 0.3f};
+    public final static double[] PATCH_TYPE_PROB = {0.35f, 0f, 0f, 0.3f, 0.35f};
     public final static int NSTATES = PatchType.values().length;
     public static int[][] TERRAIN_COLORS = {
             {250, 200, 60}, {160, 30, 70}, {200, 200, 60}, {40, 200, 20}, {217, 105, 245}
     };
 
-    public final static float[] REGENERATION_TIME = {10.f, 20.f}; // seconds
+    public final static float[] REGENERATION_TIME = {10.f, 15.f}; // seconds
     public final static float[] SPOILAGE_TIME = {5.f, 10.f}; // seconds
     public static final float SPOIL_CHANCE = 1f;
 
     public final static float PREY_SIZE = 0.4f;
     public final static float PREY_MASS = 1.f;
-    public final static int INI_PREY_POPULATION = 20;
+    public final static int INI_PREY_POPULATION = 40;
     public final static float INI_PREY_ENERGY = 15.f;
-    public final static float ENERGY_FROM_PLANT = 3.f;
-    public final static float PREY_ENERGY_TO_REPRODUCE = 40.f;
+    public final static float ENERGY_FROM_PLANT = 5.f;
+    public final static float PREY_ENERGY_TO_REPRODUCE = 25.f;
     public static final int[] PREY_COLOR = {80, 100, 220};
     
     public final static float SCAV_SIZE = 0.2f;

@@ -8,13 +8,13 @@ import util.TimeGraph;
 public class TestEcosystemApp implements IProcessingApp {
 	private SubPlot plt, pltG1, pltG2;
 	
-	private float timeDuration = 60;
-    private final float refPopulation = 720f;
+	private float timeDuration = 120;
+    private final float refPopulation = 100f;
     private final float refSmell = 1f;
     private final float refImmune = 1f;
 
     private final double[] winGraph1 = {0, timeDuration, 0, 2 * refPopulation};
-    private final double[] winGraph2 = {0,timeDuration, 0, 2*refSmell};
+    private final double[] winGraph2 = {0,timeDuration, 0, 2*refPopulation};
     private final double[] winGraph3 = {0,timeDuration, 0, 2*refImmune};
     
     private TimeGraph t1, t2, t3;
@@ -33,7 +33,7 @@ public class TestEcosystemApp implements IProcessingApp {
 		//pltG3 = SubPlot.getPlotAt(p, 0.6f, 0.6f, 1f, 0.8f, winGraph3);
 
 		t1 = new TimeGraph(p, pltG1, p.color(255, 0, 0), refPopulation);
-		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), refSmell);
+		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), refPopulation);
 		//t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), refImmune);
 		
 		terrain = new Terrain(p, plt);
@@ -74,14 +74,12 @@ public class TestEcosystemApp implements IProcessingApp {
 
 			int popPrey = population.getNumAnimals(preyId);
 			int popScav = population.getNumAnimals(scavId);
-			float avgSmellPrey = population.getMeanSmellWeight(preyId);
-			float avgSmellScav = population.getMeanSmellWeight(scavId);
 			System.out.println(String.format("Time = %ds", (int)timer));
 			System.out.println("number of prey = " + popPrey + "\nnumber of scavengers = " + popScav);
 			//System.out.println("Average smellSense of prey = " + avgSmellPrey + "\nAverage smellSense of scavenger= " + avgSmellScav);
 			System.out.println("");
-			t1.plot(timer,  population.getNumAnimals());
-			t2.plot(timer,  population.getMeanSmellWeight());
+			t1.plot(timer,  popPrey);
+			t2.plot(timer,  popScav);
 			updateGraphTime = timer + intervalUpdate;
 		}
 		
@@ -93,11 +91,11 @@ public class TestEcosystemApp implements IProcessingApp {
 		winGraph1[1] = timer + timeDuration;
 		winGraph1[3] = 2*population.getNumAnimals();
 		pltG1 = SubPlot.getPlotAt(p, 0.6f, 0f, 1f, 0.2f, winGraph1);
-		t1 = new TimeGraph(p, pltG1, p.color(255, 0, 0), population.getNumAnimals());
+		t1 = new TimeGraph(p, pltG1, p.color(255, 0, 0), population.getNumAnimals(WorldConstants.PREY_ID));
 
 		winGraph2[0] = timer;
 		winGraph2[1] = timer + timeDuration;
-		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), refSmell);
+		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), population.getNumAnimals(WorldConstants.SCAV_ID));
 		
 	}
 

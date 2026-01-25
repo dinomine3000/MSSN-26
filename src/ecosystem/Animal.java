@@ -58,13 +58,22 @@ public abstract class Animal extends Boid implements IAnimal{
     	this.img = img;
     }
 
+    public Animal withImage(PImage img) {
+    	this.img = img;
+    	return this;
+    }
 
-    private static final float SCALE = 0.08f;
+    private static final float SCALE = 0.2f;
     @Override
 	public void display(PApplet p, SubPlot plt) {
+    	if(this.img == null) {
+    		super.display(p, plt);
+    		return;
+    	}
 		float[] pp = plt.getPixelCoord(pos.x, pos.y);
 		//coordenadas da imagem: x,y  e  largura e altura de cada imagem: w,h;
 		
-		p.image(img, pp[0]-img.width*SCALE/2, pp[1]-img.height*SCALE/2, img.width*SCALE, img.height*SCALE);
+		p.image(img, pp[0]-img.width*SCALE*radius/2, pp[1]-img.height*SCALE*radius/2, 
+				img.width*SCALE*radius, img.height*SCALE*radius);
     }
 }

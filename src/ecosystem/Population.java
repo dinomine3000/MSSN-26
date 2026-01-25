@@ -22,9 +22,7 @@ public class Population {
 	
 	public Population(PApplet p, SubPlot plt, Terrain terrain) {
 		imgRabbit = p.loadImage("rabbit.png");
-		images.add(imgRabbit);
 		imgRaccoon = p.loadImage("raccoon.png");
-		images.add(imgRaccoon);
 		
 		window = plt.getWindow();
 		allAnimals = new ArrayList<Animal>();
@@ -44,6 +42,7 @@ public class Population {
 					WorldConstants.PREY_COLOR[2]);
 			Animal a = new Prey(pos, WorldConstants.PREY_MASS, WorldConstants.PREY_SIZE, color, p, plt, WorldConstants.PREY_ID);
 			a.addBehaviour(new Wander(1));
+			a.setImage(imgRabbit);
 			//a.addBehaviour(new AvoidObstacle(0));
 			//a.addBehaviour(new SmellDetection(Math.abs(a.dna.smellStrength)));
 			Eye<CellBodyProxy> eye = new Eye<>(a, obstacles);
@@ -63,6 +62,7 @@ public class Population {
 			//a.addBehaviour(new SmellDetection(Math.abs(a.dna.smellStrength)));
 			Eye<CellBodyProxy> eye = new Eye<>(a, obstacles);
 			a.setEye(eye);
+			a.setImage(imgRaccoon);
 			allAnimals.add(a);
 		}
 	}
@@ -91,7 +91,7 @@ public class Population {
 	    for (int i = allAnimals.size() - 1; i >= 0; i--) {
 	    	Animal a = allAnimals.get(i);
 			Animal child = a.reproduce(mutate);
-			if(child != null) allAnimals.add(child);
+			if(child != null) allAnimals.add(child.withImage(a.img));
 	    }
 	}
 	
