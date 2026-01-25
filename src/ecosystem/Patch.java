@@ -5,14 +5,12 @@ import ca.MajorityCell;
 
 public class Patch extends MajorityCell {
     private long eatenTime;
-    private final int timeToGrow;
-    private final int timeToSpoil;
+    private final long timeToGrow;
 
-    public Patch(Terrain terrain, int row, int col, int timeToGrow, int timeToSpoil){
+    public Patch(Terrain terrain, int row, int col, long timeToGrow){
         super(terrain, row, col);
         this.timeToGrow = timeToGrow;
         eatenTime = System.currentTimeMillis();
-        this.timeToSpoil = timeToSpoil;
     }
 
     public void setFertile(){
@@ -28,14 +26,12 @@ public class Patch extends MajorityCell {
     }
 
     public void regenerate(Terrain terrain){
+    	long timestampCheck = eatenTime + timeToGrow + WorldConstants.GROW_TIME_MODIFIERS[terrain.season];
         if(state == WorldConstants.PatchType.FERTILE.ordinal()
-                    && System.currentTimeMillis() > (eatenTime + timeToGrow)){
+                    && System.currentTimeMillis() > timestampCheck){
     		state = WorldConstants.PatchType.FOOD.ordinal();
         }
 
-    }
-    
-    public void spoil(Terrain terrain) {    	
     }
 
 }

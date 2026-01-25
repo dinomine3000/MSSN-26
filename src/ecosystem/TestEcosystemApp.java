@@ -14,7 +14,7 @@ public class TestEcosystemApp implements IProcessingApp {
     private final float refImmune = 1f;
 
     private final double[] winGraph1 = {0, timeDuration, 0, 2 * refPopulation};
-    private final double[] winGraph2 = {0,timeDuration, 0, 2*refPopulation};
+    private final double[] winGraph2 = {0,timeDuration, 0, 3*refPopulation};
     private final double[] winGraph3 = {0,timeDuration, 0, 2*refImmune};
     
     private TimeGraph t1, t2, t3;
@@ -24,6 +24,8 @@ public class TestEcosystemApp implements IProcessingApp {
 	
 	private float timer, updateGraphTime;
 	private float intervalUpdate = 1;
+	
+	private boolean tickSeasons = false;
 
 	@Override
 	public void setup(PApplet p) {
@@ -62,7 +64,8 @@ public class TestEcosystemApp implements IProcessingApp {
 		timer += dt;
 	
 		terrain.regenerate();
-		terrain.spoil();
+		if(tickSeasons)
+			terrain.tickSeason();
 		population.update(dt, terrain);
 		
 		terrain.display(p);
@@ -82,11 +85,42 @@ public class TestEcosystemApp implements IProcessingApp {
 			t2.plot(timer,  popScav);
 			updateGraphTime = timer + intervalUpdate;
 		}
-		
+		p.fill(255);
+		p.textSize(25);
+	    p.textAlign(PApplet.LEFT, PApplet.TOP);
+	    p.text("Current season is " + getSeasonFromOrdinal(terrain.season), 5, 5);
+		if(!tickSeasons) {
+		    p.text("Seasons are frozen.", 5, 45);
+		}
+	}
+	
+	public String getSeasonFromOrdinal(int season) {
+        if (season == WorldConstants.Season.FALL.ordinal()) {
+            return "Fall";
+        }
+
+        if (season == WorldConstants.Season.WINTER.ordinal()) {
+            return "Winter";
+        }
+
+        if (season == WorldConstants.Season.SPRING.ordinal()) {
+            return "Spring";
+        }
+
+        if (season == WorldConstants.Season.SUMMER.ordinal()) {
+            return "Summer";
+        }
+
+        return "Fall";
 	}
 
 	@Override
 	public void mousePressed(PApplet p) {
+		if(p.mouseButton == 39) {
+			this.terrain.advanceSeasons();
+			return;
+		}
+		
 		winGraph1[0] = timer;
 		winGraph1[1] = timer + timeDuration;
 		winGraph1[3] = 2*population.getNumAnimals();
@@ -113,7 +147,9 @@ public class TestEcosystemApp implements IProcessingApp {
 
 	@Override
 	public void keyPressed(PApplet p) {
-		// TODO Auto-generated method stub
+		if(p.key == 'e') {
+			this.tickSeasons = !this.tickSeasons;
+		}
 		
 	}
 

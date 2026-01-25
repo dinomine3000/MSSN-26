@@ -1,6 +1,7 @@
 package ecosystem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ca.CellBodyProxy;
@@ -10,26 +11,57 @@ import physics.Body;
 import processing.core.PApplet;
 
 public class Terrain extends MajorityCa {
+	protected int season = WorldConstants.Season.FALL.ordinal();
+	private long lastChangeStamp = 0;
 
     public Terrain(PApplet p, SubPlot plt){
         super(p, plt, WorldConstants.NROWS, WorldConstants.NCOLS, WorldConstants.NSTATES, 1);
+        lastChangeStamp = System.currentTimeMillis();
     }
 
     protected void createCells(){
-        int minRT = (int)(WorldConstants.REGENERATION_TIME[0]*1000);
-        int maxRT = (int)(WorldConstants.REGENERATION_TIME[1]*1000);
-
-        int minST = (int)(WorldConstants.SPOILAGE_TIME[0]*1000);
-        int maxST = (int)(WorldConstants.SPOILAGE_TIME[1]*1000);
+        long minRT = (long)(WorldConstants.REGENERATION_TIME[0]*1000);
+        long maxRT = (long)(WorldConstants.REGENERATION_TIME[1]*1000);
 
         for(int i = 0; i < nrows; i++){
             for(int j = 0; j < ncols; j++){
-                int timeToGrow = (int)(minRT + (maxRT - minRT) * Math.random());
-                int timeToSpoil = (int)(minST + (maxST - minST) * Math.random());
-                cells[i][j] = new Patch(this, i, j, timeToGrow, timeToSpoil);
+                long timeToGrow = (int)(minRT + (maxRT - minRT) * Math.random());
+                cells[i][j] = new Patch(this, i, j, timeToGrow);
             }
         }
         setMooreNeighbours();
+    }
+    
+    public void tickSeason() {
+    	if(System.currentTimeMillis() - lastChangeStamp > WorldConstants.TIME_TO_CHANGE_SEASONS*1000) {
+    		lastChangeStamp = System.currentTimeMillis();
+    		season = nextSeason(season);
+    	}
+    }
+    
+    public void advanceSeasons() {
+		lastChangeStamp = System.currentTimeMillis();
+    	season = nextSeason(season);
+    }
+    
+    private int nextSeason(int currentSeason) {
+        if (currentSeason == WorldConstants.Season.FALL.ordinal()) {
+            return WorldConstants.Season.WINTER.ordinal();
+        }
+
+        if (currentSeason == WorldConstants.Season.WINTER.ordinal()) {
+            return WorldConstants.Season.SPRING.ordinal();
+        }
+
+        if (currentSeason == WorldConstants.Season.SPRING.ordinal()) {
+            return WorldConstants.Season.SUMMER.ordinal();
+        }
+
+        if (currentSeason == WorldConstants.Season.SUMMER.ordinal()) {
+            return WorldConstants.Season.FALL.ordinal();
+        }
+
+        return WorldConstants.Season.FALL.ordinal();
     }
 
 
@@ -41,12 +73,27 @@ public class Terrain extends MajorityCa {
         }
     }
     
-    public void spoil() {
-        for(int i = 0; i < nrows; i++){
-            for (int j = 0; j < ncols; j++){
-                ((Patch)cells[i][j]).spoil(this);
-            }
+    @Override
+    public void display(PApplet p) {
+    	super.display(p);
+
+        p.pushStyle();
+        p.noStroke();
+
+        float[] window = this.plt.getBoundingBox();
+        if (season == WorldConstants.Season.SUMMER.ordinal()) {
+            // yellow tint
+            p.fill(255, 255, 0, 60); // RGBA, low alpha
+            p.rect(window[0], window[1], window[2], window[3]);
         }
+
+        if (season == WorldConstants.Season.WINTER.ordinal()) {
+            // blue tint
+            p.fill(0, 120, 255, 40);
+            p.rect(window[0], window[1], window[2], window[3]);
+        }
+
+        p.popStyle();
     }
     
     public List<CellBodyProxy> getCells(int patchType){

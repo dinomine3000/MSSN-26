@@ -11,14 +11,18 @@ public class WorldConstants {
     public enum PatchType{
         EMPTY, OBSTACLE, FERTILE, FOOD, SPOILED
     }
+    public enum Season{
+        SUMMER, FALL, WINTER, SPRING
+    }
+    public static final long[] GROW_TIME_MODIFIERS = {-5000, 0, 5000, 0};
+    public static final float TIME_TO_CHANGE_SEASONS = 30f; // seconds
     public final static double[] PATCH_TYPE_PROB = {0.35f, 0f, 0f, 0.3f, 0.35f};
     public final static int NSTATES = PatchType.values().length;
     public static int[][] TERRAIN_COLORS = {
             {250, 200, 60}, {160, 30, 70}, {200, 200, 60}, {40, 200, 20}, {217, 105, 245}
     };
-
-    public final static float[] REGENERATION_TIME = {10.f, 15.f}; // seconds
-    public final static float[] SPOILAGE_TIME = {5.f, 10.f}; // seconds
+    
+    public final static float[] REGENERATION_TIME = {5.f, 15.f}; // seconds
     public static final float SPOIL_CHANCE = 1f;
 
     public final static float PREY_SIZE = 0.4f;

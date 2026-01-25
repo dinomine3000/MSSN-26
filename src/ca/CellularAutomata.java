@@ -13,7 +13,7 @@ public class CellularAutomata {
 	protected int offsetY = 0;
 	private float cellWidth, cellHeight;
 	public float xmin, ymin;
-	private SubPlot plt;
+	protected SubPlot plt;
 	
 	public CellularAutomata(PApplet p, SubPlot plt, int nrows, int ncols, int nStates, int radiusNeigh) {
 		this.nrows = nrows;
