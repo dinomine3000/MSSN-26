@@ -114,7 +114,8 @@ public class Boid extends Body{
 	}
 	
 	private void move(float dt, PVector vd) {
-        vd.normalize().mult(dna.maxSpeed);
+//        vd.normalize().mult(dna.maxSpeed);
+		if(vd.mag() > dna.maxSpeed) vd.normalize().mult(dna.maxSpeed);
         PVector fs = PVector.sub(vd, vel);
         applyForce(fs.limit(dna.maxForce));
         super.move(dt);

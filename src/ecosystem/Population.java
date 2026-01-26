@@ -37,7 +37,7 @@ public class Population {
 					WorldConstants.PREY_COLOR[0],
 					WorldConstants.PREY_COLOR[1],
 					WorldConstants.PREY_COLOR[2]);
-			Animal a = new Prey(pos, WorldConstants.PREY_MASS, WorldConstants.PREY_SIZE, color, p, plt, WorldConstants.PREY_ID);
+			Animal a = new Herbivore(pos, WorldConstants.PREY_MASS, WorldConstants.PREY_SIZE, color, p, plt, WorldConstants.PREY_ID);
 			a.addBehaviour(new Wander(1));
 			if(WorldConstants.DO_HIBERNATION) {
 				a.addBehaviour(new ConditionalBrake(1));

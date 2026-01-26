@@ -8,13 +8,13 @@ import hello.SubPlot;
 
 import java.util.List;
 
-public class Prey extends Animal{
-    public Prey(PVector pos, float mass, float radius, int color, PApplet parent, SubPlot plt, int id) {
+public class Herbivore extends Animal{
+    public Herbivore(PVector pos, float mass, float radius, int color, PApplet parent, SubPlot plt, int id) {
         super(pos, mass, radius, color, parent, plt, id);
         energy = WorldConstants.INI_PREY_ENERGY;
     }
 
-    public Prey(Prey prey, boolean mutate, PApplet p, SubPlot plt){
+    public Herbivore(Herbivore prey, boolean mutate, PApplet p, SubPlot plt){
         super(prey, mutate, p, plt);
         energy = WorldConstants.INI_PREY_ENERGY;
     }
@@ -34,7 +34,7 @@ public class Prey extends Animal{
         Animal child = null;
         if(energy > WorldConstants.PREY_ENERGY_TO_REPRODUCE){
             energy -= WorldConstants.INI_PREY_ENERGY;
-            child = new Prey(this, mutate, p, plt);
+            child = new Herbivore(this, mutate, p, plt);
             if(mutate) child.mutateBehaviours();
         }
         return child;

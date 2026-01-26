@@ -31,6 +31,9 @@ public class TestEcosystemApp implements IProcessingApp {
 	public void setup(PApplet p) {
 		
 		plt = SubPlot.getPlotAt(p, 0, 0, 0.6f, 1, WorldConstants.WINDOW);
+		//para criar um subplot, defines 2 pontos, 1 e 2. as coordenadas sao percentages do ecra.
+		//x1 = 0.2, y1 = 0.6 significa que o ponto está a 20% do caminho da esquerda para a direita, e 60% do caminho de cima para baixo
+		//ent defines 2 pontos, (x1, y1) e (x2, y2) para definir os cantos opostos do subplot.
 		pltG1 = SubPlot.getPlotAt(p, 0.65f, 0.1f, 0.95f, 0.3f, winGraph1);
 		pltG2 = SubPlot.getPlotAt(p, 0.65f, 0.4f, 0.95f, 0.6f, winGraph2);
 		pltCol1 = SubPlot.getPlotAt(p, 0.6f, 0, 0.65f, 1, winCol);
@@ -93,13 +96,10 @@ public class TestEcosystemApp implements IProcessingApp {
 			updateGraphTime = timer + intervalUpdate;
 		}
 		
-		p.fill(225);
-		p.textSize(25);
-	    p.textAlign(PApplet.LEFT, PApplet.TOP);
-	    p.text("Current season is " + getSeasonFromOrdinal(terrain.season), 5, 5);
-	    
+		drawText(p, "Current season is " + getSeasonFromOrdinal(terrain.season), 5, 5);
+		
 		if(!tickSeasons) {
-		    p.text("Seasons are frozen.", 5, 45);
+			drawText(p, "Seasons are frozen.", 5, 45);
 		}
 		
 		float[] bb1 = pltCol1.getBoundingBox();
@@ -109,6 +109,20 @@ public class TestEcosystemApp implements IProcessingApp {
 		p.noStroke();
 		p.rect(bb1[0], bb1[1], bb1[2], bb1[3]);
 		p.rect(bb2[0], bb2[1], bb2[2], bb2[3]);
+	}
+	
+	private void drawText(PApplet p, String text, int x, int y) {
+		p.textSize(25);
+		p.fill(0);
+	    p.textAlign(PApplet.LEFT, PApplet.TOP);
+	    for(int i = -1; i < 2; i++){
+	        p.text(text, x+i,y);
+	        p.text(text, x,y+i);
+	    }
+		p.fill(250);
+	    p.text(text, x, y);
+//	    p.text("Current season is " + getSeasonFromOrdinal(terrain.season), 5, 5);
+	    
 	}
 	
 	public String getSeasonFromOrdinal(int season) {
@@ -157,6 +171,9 @@ public class TestEcosystemApp implements IProcessingApp {
 	public void keyPressed(PApplet p) {
 		if(p.key == 'e') {
 			this.tickSeasons = !this.tickSeasons;
+		}
+		if(p.key == 'r') {
+			setup(p);
 		}
 		
 	}
