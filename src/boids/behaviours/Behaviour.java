@@ -1,5 +1,6 @@
 package boids.behaviours;
 
+import boids.Boid;
 import processing.core.PVector;
 
 public abstract class Behaviour implements IBehaviour{
@@ -18,4 +19,6 @@ public abstract class Behaviour implements IBehaviour{
 	public float getWeight() {
 		return this.weight;
 	}
+	
+	public boolean isActive(Boid me) {return true;}
 }

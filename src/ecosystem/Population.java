@@ -5,7 +5,7 @@ import java.util.List;
 
 import boids.Eye;
 import boids.behaviours.AvoidObstacle;
-import boids.behaviours.SmellDetection;
+import boids.behaviours.ConditionalBrake;
 import boids.behaviours.Wander;
 import ca.CellBodyProxy;
 import hello.SubPlot;
@@ -27,11 +27,8 @@ public class Population {
 		window = plt.getWindow();
 		allAnimals = new ArrayList<Animal>();
 
-		List<CellBodyProxy> obstacles = terrain.getCells(WorldConstants.PatchType.OBSTACLE.ordinal());
 		List<CellBodyProxy> spoiledFood = terrain.getCells(WorldConstants.PatchType.SPOILED.ordinal());
 		List<CellBodyProxy> food = terrain.getCells(WorldConstants.PatchType.FOOD.ordinal());
-		obstacles.addAll(spoiledFood);
-		obstacles.addAll(food);
 
 		for(int i = 0; i < WorldConstants.INI_PREY_POPULATION; i++) {
 			PVector pos = new PVector(p.random((float)window[0], (float)window[1]),
@@ -42,11 +39,14 @@ public class Population {
 					WorldConstants.PREY_COLOR[2]);
 			Animal a = new Prey(pos, WorldConstants.PREY_MASS, WorldConstants.PREY_SIZE, color, p, plt, WorldConstants.PREY_ID);
 			a.addBehaviour(new Wander(1));
+			if(WorldConstants.DO_HIBERNATION) {
+				a.addBehaviour(new ConditionalBrake(1));
+				Eye<CellBodyProxy> eye = new Eye<>(a, food);
+				a.setEye(eye);
+			}
 			a.setImage(imgRabbit);
 			//a.addBehaviour(new AvoidObstacle(0));
 			//a.addBehaviour(new SmellDetection(Math.abs(a.dna.smellStrength)));
-			Eye<CellBodyProxy> eye = new Eye<>(a, obstacles);
-			a.setEye(eye);
 			allAnimals.add(a);
 		}
 		for(int i = 0; i < WorldConstants.INI_SCAV_POPULATION; i++) {
@@ -58,10 +58,13 @@ public class Population {
 					WorldConstants.SCAV_COLOR[2]);
 			Animal a = new Scavenger(pos, WorldConstants.SCAV_MASS, WorldConstants.SCAV_SIZE, color, p, plt, WorldConstants.SCAV_ID);
 			a.addBehaviour(new Wander(1));
+			if(WorldConstants.DO_HIBERNATION) {
+				a.addBehaviour(new ConditionalBrake(1));
+				Eye<CellBodyProxy> eye = new Eye<>(a, spoiledFood);
+				a.setEye(eye);
+			}
 			//a.addBehaviour(new AvoidObstacle(0));
 			//a.addBehaviour(new SmellDetection(Math.abs(a.dna.smellStrength)));
-			Eye<CellBodyProxy> eye = new Eye<>(a, obstacles);
-			a.setEye(eye);
 			a.setImage(imgRaccoon);
 			allAnimals.add(a);
 		}
@@ -116,15 +119,7 @@ public class Population {
 	public int getNumAnimals(int id) {
 		return getAnimalsOfId(id).size();
 	}
-	
-	public float getMeanSmellWeight() {return getMeanSmellWeight(-1);}
-	
-	public float getMeanSmellWeight(int id) {
-		float sum = 0;
-		for(Animal a: getAnimalsOfId(id))
-			sum += a.getDNA().smellStrength;
-		return sum / getNumAnimals(id);
-	}
+
 	
 	public float[] getMeanWeights() {
 		float[] sums = new float[2];

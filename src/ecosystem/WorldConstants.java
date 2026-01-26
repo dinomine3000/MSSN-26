@@ -24,6 +24,7 @@ public class WorldConstants {
     
     public final static float[] REGENERATION_TIME = {5.f, 15.f}; // seconds
     public static final float SPOIL_CHANCE = 1f;
+    public static final boolean DO_HIBERNATION = true;
 
     public final static float PREY_SIZE = 0.4f;
     public final static float PREY_MASS = 1.f;

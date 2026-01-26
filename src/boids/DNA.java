@@ -1,7 +1,5 @@
 package boids;
 
-import physics.PSControl;
-
 public class DNA {
 	public float maxSpeed;
 	public float maxForce;
@@ -14,7 +12,7 @@ public class DNA {
 	public float radiusWander;
 	public float deltaPhiWander;
 	
-	public float smellStrength;
+	public int hibernationThreshold;
 	
 	
 	public DNA() {
@@ -34,7 +32,7 @@ public class DNA {
 		radiusWander = random(1f, 3f);
 		deltaPhiWander = (float)Math.PI/8;
 
-		smellStrength = random(-2f, 2f);
+		hibernationThreshold = (int) random(1, 10);
 	}
 	
 	public DNA(DNA dna, boolean mutate) {
@@ -51,18 +49,20 @@ public class DNA {
 		deltaTWander = dna.deltaPhiWander;
 		deltaPhiWander = dna.deltaPhiWander;
 		radiusWander = dna.radiusWander;
-		
-		smellStrength = dna.smellStrength;
+
+		this.hibernationThreshold = dna.hibernationThreshold;
 		if(mutate) mutate();
 	}
 	
 	private void mutate() {
 		maxSpeed += random(-0.2f, 0.2f);
 		maxSpeed = Math.max(0, maxSpeed);
-		
-		smellStrength += random(-1f, 1f);
-		smellStrength = Math.max(-10, smellStrength);
-		smellStrength = Math.min(10, smellStrength);
+
+		visionSafeDistance += random(-1f, 1f);
+		visionSafeDistance = Math.max(1, visionSafeDistance);
+
+		hibernationThreshold += (int)(random(-10, 10));
+		hibernationThreshold = Math.max(hibernationThreshold, 0);
 	}
 
 	public static float random(float min, float max) {

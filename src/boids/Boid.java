@@ -5,7 +5,7 @@ import java.util.List;
 
 import boids.behaviours.AvoidObstacle;
 import boids.behaviours.Behaviour;
-import boids.behaviours.SmellDetection;
+import boids.behaviours.ConditionalBrake;
 import boids.behaviours.Wander;
 import hello.SubPlot;
 import physics.Body;
@@ -102,12 +102,15 @@ public class Boid extends Body{
 	public void applyBehaviours(float dt) {
         if (eye != null) eye.look();
         PVector vd = new PVector();
+        int sum = 0;
         for (Behaviour behavior : behaviours) {
+        	if(!behavior.isActive(this)) continue;
             PVector vdd = behavior.getDesiredVelocity(this);
-            vdd.mult(behavior.getWeight() / sumWeights);
+            sum += behavior.getWeight();
+            vdd.mult(behavior.getWeight());
             vd.add(vdd);
         }
-        move(dt, vd);
+        move(dt, vd.mult(1/sum));
 	}
 	
 	private void move(float dt, PVector vd) {
@@ -145,11 +148,7 @@ public class Boid extends Body{
 
 	public void mutateBehaviours() {
 		for(Behaviour b: behaviours) {
-			if(b instanceof Wander) {
-				b.weight += DNA.random(-0.2f, 0.2f);
-				b.weight = Math.max(1,  b.weight);
-			}
-			if(b instanceof SmellDetection) {
+			if(b instanceof ConditionalBrake) {
 				b.weight += DNA.random(-0.2f, 0.2f);
 				b.weight = Math.max(0,  b.weight);
 			}
