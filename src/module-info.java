@@ -4,7 +4,7 @@
 /**
  *
  */
-module MSSN_TP3 {
+module MSSN_26 {
     requires core;
     exports hello;
 }
