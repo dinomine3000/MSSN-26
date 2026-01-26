@@ -23,6 +23,7 @@ public class TimeGraph {
 		this.p = p;
 		this.plt = plt;
 		this.color = color;
+		float lineHeight = ref/10f;
 		double[] window = plt.getWindow();
 
 		last = new float[color.length][2];
@@ -40,7 +41,7 @@ public class TimeGraph {
 		//draw 10 second markers
 		for(int i = 0; i < window[1]; i += 10) {
 			float[] lineStart = plt.getPixelCoord(i, 0);
-			float[] lineEnd = plt.getPixelCoord(i, 10);
+			float[] lineEnd = plt.getPixelCoord(i, lineHeight);
 			p.line(lineStart[0], lineStart[1], lineEnd[0], lineEnd[1]);
 		}
 		
@@ -49,7 +50,7 @@ public class TimeGraph {
 		p.line(ri[0], ri[1], rf[0], rf[1]);
 		p.textSize(12);
 		p.fill(0);
-		p.text(String.format("%.1f", ref), rf[0]-36, rf[1]);
+		p.text(String.format("%.01f", ref), rf[0]-36, rf[1]);
 		p.popStyle();
 	}
 

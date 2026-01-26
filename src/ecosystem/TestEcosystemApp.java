@@ -7,17 +7,24 @@ import util.TimeGraph;
 
 public class TestEcosystemApp implements IProcessingApp {
 	
-	private SubPlot plt, pltG1, pltG2, pltCol1, pltCol2;
+	private SubPlot plt, pltG1, pltG2, pltG3,
+					pltCol1, pltCol2,
+					pltLin1, pltLin2, pltLin3, pltLin4;
+	
+	private SubPlot[] pltAuxs = {pltCol1, pltCol2, pltLin1, pltLin2, pltLin3, pltLin4};
 	
 	private float timeDuration = 120;
     private final float refPopulation = 100f;
+    private final float refHiber = 1f;
 
-    private final double[] winCol= {0, 2, 0,2};
     
     private final double[] winGraph1 = {0, timeDuration, 0, 2 * refPopulation};
-    private final double[] winGraph2 = {0,timeDuration, 0, 3*refPopulation};
+    private final double[] winGraph2 = {0,timeDuration, 0, 2 * refPopulation};
+    private final double[] winGraph3 = {0,timeDuration, 0, 2 * refHiber};
     
-    private TimeGraph t1, t2;
+    private final double[] winSect= {0, 2, 0, 2};
+    
+    private TimeGraph t1, t2, t3;
 	
 	private Terrain terrain;
 	private Population population;
@@ -36,11 +43,19 @@ public class TestEcosystemApp implements IProcessingApp {
 		//ent defines 2 pontos, (x1, y1) e (x2, y2) para definir os cantos opostos do subplot.
 		pltG1 = SubPlot.getPlotAt(p, 0.65f, 0.1f, 0.95f, 0.3f, winGraph1);
 		pltG2 = SubPlot.getPlotAt(p, 0.65f, 0.4f, 0.95f, 0.6f, winGraph2);
-		pltCol1 = SubPlot.getPlotAt(p, 0.6f, 0, 0.65f, 1, winCol);
-		pltCol2 = SubPlot.getPlotAt(p, 0.95f, 0, 1, 1, winCol);
+		pltG3 = SubPlot.getPlotAt(p, 0.65f, 0.7f, 0.95f, 0.9f, winGraph3);
+		
+		pltAuxs[0] = SubPlot.getPlotAt(p, 0.6f, 0, 0.65f, 1, winSect);
+		pltAuxs[1] = SubPlot.getPlotAt(p, 0.95f, 0, 1, 1, winSect);
+		
+		pltAuxs[2] = SubPlot.getPlotAt(p, 0.6f, 0, 1, 0.1f, winSect);
+		pltAuxs[3] = SubPlot.getPlotAt(p, 0.6f, 0.3f, 1, 0.4f, winSect);
+		pltAuxs[4] = SubPlot.getPlotAt(p, 0.6f, 0.6f, 1, 0.7f, winSect);
+		pltAuxs[5] = SubPlot.getPlotAt(p, 0.6f, 0.9f, 1, 1f, winSect);
 
 		t1 = new TimeGraph(p, pltG1, p.color(255, 0, 0), refPopulation);
 		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), refPopulation);
+		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), refHiber);
 		
 		terrain = new Terrain(p, plt);
 		terrain.setStateColors(getColors(p));
@@ -76,8 +91,6 @@ public class TestEcosystemApp implements IProcessingApp {
 		terrain.display(p);
 		population.display(p, plt);
 		
-		
-		
 		if(timer > updateGraphTime) {
 			
 			int preyId = WorldConstants.PREY_ID;
@@ -85,13 +98,16 @@ public class TestEcosystemApp implements IProcessingApp {
 
 			int popPrey = population.getNumAnimals(preyId);
 			int popScav = population.getNumAnimals(scavId);
+			float[] popHiber = population.getMeanWeights();
 			
 			System.out.println(String.format("Time = %ds", (int)timer));
 			System.out.println("number of prey = " + popPrey + "\nnumber of scavengers = " + popScav);
+			System.out.println("media peso hibernação = " + popHiber[1]);
 			System.out.println("");
 			
 			t1.plot(timer,  popPrey);
 			t2.plot(timer,  popScav);
+			t3.plot(timer,  popHiber[1]);
 			
 			updateGraphTime = timer + intervalUpdate;
 		}
@@ -102,13 +118,17 @@ public class TestEcosystemApp implements IProcessingApp {
 			drawText(p, "Seasons are frozen.", 5, 45);
 		}
 		
-		float[] bb1 = pltCol1.getBoundingBox();
-		float[] bb2 = pltCol2.getBoundingBox();
 		p.pushStyle();
 		p.fill(0);
 		p.noStroke();
-		p.rect(bb1[0], bb1[1], bb1[2], bb1[3]);
-		p.rect(bb2[0], bb2[1], bb2[2], bb2[3]);
+		
+		for (SubPlot pltAux : pltAuxs) {
+			float[] bb = pltAux.getBoundingBox();
+			p.rect(bb[0], bb[1], bb[2], bb[3]);
+		}
+		drawText(p, "Number of Prey:", 518, 35);
+		drawText(p, "Number of Scavangers:", 518, 215);
+		drawText(p, "HiberWeight Mean:", 518, 395);
 	}
 	
 	private void drawText(PApplet p, String text, int x, int y) {
@@ -143,16 +163,21 @@ public class TestEcosystemApp implements IProcessingApp {
 		
 		winGraph1[0] = timer;
 		winGraph1[1] = timer + timeDuration;
-		winGraph1[3] = 2*population.getNumAnimals();
+		winGraph1[3] = 2*population.getNumAnimals(WorldConstants.PREY_ID);
 		pltG1 = SubPlot.getPlotAt(p, 0.65f, 0.1f, 0.95f, 0.3f, winGraph1);
 		t1 = new TimeGraph(p, pltG1, p.color(255, 0, 0), population.getNumAnimals(WorldConstants.PREY_ID));
 
 		winGraph2[0] = timer;
 		winGraph2[1] = timer + timeDuration;
-		winGraph1[3] = 2*population.getNumAnimals();
+		winGraph2[3] = 2*population.getNumAnimals(WorldConstants.SCAV_ID);
 		pltG2 = SubPlot.getPlotAt(p, 0.65f, 0.4f, 0.95f, 0.6f, winGraph2);
 		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), population.getNumAnimals(WorldConstants.SCAV_ID));
 		
+		winGraph3[0] = timer;
+		winGraph3[1] = timer + timeDuration;
+		winGraph3[3] = 2*population.getMeanWeights()[1];
+		pltG3 = SubPlot.getPlotAt(p, 0.65f, 0.7f, 0.95f, 0.9f, winGraph3);
+		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), population.getMeanWeights()[1]);
 	}
 
 	@Override

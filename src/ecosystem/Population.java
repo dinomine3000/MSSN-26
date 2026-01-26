@@ -131,8 +131,4 @@ public class Population {
 		sums[1] /= allAnimals.size();
 		return sums;
 	}
-	
-	public float getPreyNumber() {return getNumAnimals(1);}
-	public float getScavNumber() {return getNumAnimals(2);}
-
 }
