@@ -114,8 +114,6 @@ public class Population {
 		return allAnimals.stream().filter(a -> a.id == id).toList();
 	}
 	
-	public int getNumAnimals() {return getNumAnimals(-1);}
-	
 	public int getNumAnimals(int id) {
 		return getAnimalsOfId(id).size();
 	}
@@ -130,5 +128,56 @@ public class Population {
 		sums[0] /= allAnimals.size();
 		sums[1] /= allAnimals.size();
 		return sums;
+	}
+
+	public float getLimiar(int paramId) {
+		if(allAnimals.isEmpty()) return 0;
+		
+	    float sum = 0;
+	    int count = 0;
+	    for (Animal a : allAnimals) {
+	        switch (paramId) {
+	            case 1:
+	                sum += a.dna.hibernationThreshold;
+	                break;
+
+	            case 2:
+	                sum += a.dna.visionSafeDistance;
+	                break;
+	        }
+	        count++;
+	    }
+	    if (count == 0) return 0;
+	    return sum / count;
+	}
+
+	public float getDesvioPadrao(int paramId) {
+	    if(allAnimals.isEmpty()) return 0;
+
+		float mean = this.getLimiar(paramId);
+	    float sum = 0;
+	    for(Animal a : allAnimals) {
+	    	switch (paramId) {
+	    	case 1:
+	    		sum += Math.pow(a.dna.hibernationThreshold - mean, 2);
+    	        break;
+	    	    
+	    	case 2:
+    	        sum += Math.pow(a.dna.visionSafeDistance - mean, 2);
+    	        break;
+		    }
+	    }
+	    return (float) Math.sqrt(sum / allAnimals.size());
+	}
+	
+	public float getMeanVisionSafeDistance() {
+		if(allAnimals.isEmpty()) return 0;
+
+	    float sum = 0;
+	    for (Animal a : allAnimals) {
+	        sum += a.dna.visionSafeDistance;
+	    }
+
+	    return sum / allAnimals.size();
 	}
 }
