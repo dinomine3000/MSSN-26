@@ -76,11 +76,12 @@ public class Boid extends Body{
         shape.endShape(PConstants.CLOSE);
 	}
 	
-	private void sumWeights() {
+	private float sumWeights() {
 		sumWeights = 0;
 		
 		for(Behaviour b : behaviours)
 			sumWeights += b.getWeight();
+		return sumWeights;
 	}
 	
 	public void addBehaviour(Behaviour beh) {
@@ -107,19 +108,17 @@ public class Boid extends Body{
 	public void applyBehaviours(float dt) {
         if (eye != null) eye.look();
         PVector vd = new PVector();
-        float sum = 0;
+        sumWeights();
         for (Behaviour behavior : behaviours) {
             PVector vdd = behavior.getDesiredVelocity(this);
-            sum += behavior.getWeight();
-            vdd = vdd.mult(behavior.getWeight());
+            vdd = vdd.mult(behavior.getWeight()/sumWeights);
             vd = vd.add(vdd);
         }
-        move(dt, vd.mult(1/sum));
+        move(dt, vd);
 	}
 	
 	private void move(float dt, PVector vd) {
         vd = vd.normalize().mult(dna.maxSpeed);
-        System.out.println(vd.mag());
 //		if(vd.mag() > dna.maxSpeed) vd = vd.normalize().mult(dna.maxSpeed);
         PVector fs = PVector.sub(vd, vel);
         applyForce(fs.limit(dna.maxForce));

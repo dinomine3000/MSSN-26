@@ -41,11 +41,8 @@ public class Population {
 					WorldConstants.PREY_COLOR[2]);
 			Animal a = new Herbivore(pos, WorldConstants.PREY_MASS, WorldConstants.PREY_SIZE, color, p, plt, WorldConstants.PREY_ID);
 			a.addBehaviour(new Wander(1));
-			if(WorldConstants.DO_HIBERNATION) {
-				a.addBehaviour(new ConditionalBrakeFood(3));
-				Eye eye = new Eye(a, food);
-				a.setEye(eye);
-			}
+			Eye eye = new Eye(a, food);
+			a.setEye(eye);
 			a.setImage(imgRabbit);
 			//a.addBehaviour(new AvoidObstacle(0));
 			//a.addBehaviour(new SmellDetection(Math.abs(a.dna.smellStrength)));
@@ -60,11 +57,8 @@ public class Population {
 					WorldConstants.SCAV_COLOR[2]);
 			Animal a = new Scavenger(pos, WorldConstants.SCAV_MASS, WorldConstants.SCAV_SIZE, color, p, plt, WorldConstants.SCAV_ID);
 			a.addBehaviour(new Wander(1));
-			if(WorldConstants.DO_HIBERNATION) {
-				a.addBehaviour(new ConditionalBrakeSpoiled(3));
-				Eye eye = new Eye(a, food);
-				a.setEye(eye);
-			}
+			Eye eye = new Eye(a, food);
+			a.setEye(eye);
 			//a.addBehaviour(new AvoidObstacle(0));
 			//a.addBehaviour(new SmellDetection(Math.abs(a.dna.smellStrength)));
 			a.setImage(imgRaccoon);
@@ -149,43 +143,11 @@ public class Population {
 	}
 
 	public float getMean(int paramId) {
-		if(allAnimals.isEmpty()) return 0;
-		
-	    float sum = 0;
-	    int count = 0;
-	    for (Animal a : allAnimals) {
-	        switch (paramId) {
-	            case 1:
-	                sum += a.dna.hibernationThreshold;
-	                break;
-
-	            case 2:
-	                sum += a.dna.visionSafeDistance;
-	                break;
-	        }
-	        count++;
-	    }
-	    if (count == 0) return 0;
-	    return sum / count;
+		return 0;
 	}
 
 	public float getDesvioPadrao(int paramId) {
-	    if(allAnimals.isEmpty()) return 0;
-
-		float mean = this.getMean(paramId);
-	    float sum = 0;
-	    for(Animal a : allAnimals) {
-	    	switch (paramId) {
-	    	case 1:
-	    		sum += Math.pow(a.dna.hibernationThreshold - mean, 2);
-    	        break;
-	    	    
-	    	case 2:
-    	        sum += Math.pow(a.dna.visionSafeDistance - mean, 2);
-    	        break;
-		    }
-	    }
-	    return (float) Math.sqrt(sum / allAnimals.size());
+		return 0;
 	}
 	
 	public float getMeanVisionSafeDistance() {

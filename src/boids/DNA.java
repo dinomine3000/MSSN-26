@@ -14,17 +14,14 @@ public class DNA {
 	public float radiusWander;
 	public float deltaPhiWander;
 	
-	public int hibernationThreshold;
-	public int smellStrength;
-	
 	
 	public DNA() {
 		//phyics
 		maxSpeed = random(1f, 2f);
 		maxForce = random(4f, 7f);
 		//vision
-		visionDistance = random(100.f, 1000.f);
-		visionSafeDistance = 15;
+		visionDistance = random(8.f, 15.f);
+		visionSafeDistance = 10;
 		visionAngle = (float)Math.PI * 0.3f;
 		//pursuit
 		deltaTPursuit = random(0.5f, 1f);
@@ -34,10 +31,6 @@ public class DNA {
 		deltaTWander = random(0.3f, 0.6f);
 		radiusWander = random(1f, 3f);
 		deltaPhiWander = (float)Math.PI/8;
-
-		smellStrength = Math.random() < 0.5 ? 3 : -3;
-		
-		hibernationThreshold = (int)random(5, 8);
 	}
 	
 	public DNA(DNA dna, boolean mutate) {
@@ -64,10 +57,7 @@ public class DNA {
 //
 //		visionSafeDistance += random(-1f, 1f);
 //		visionSafeDistance = Math.max(1, visionSafeDistance);
-//
-		if(!WorldConstants.DO_HIBERNATION) return;
-		hibernationThreshold += (int)(random(-2, 2));
-		hibernationThreshold = Math.max(hibernationThreshold, 0);
+
 	}
 
 	public static float random(float min, float max) {
