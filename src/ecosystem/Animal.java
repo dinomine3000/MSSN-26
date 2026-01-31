@@ -1,7 +1,6 @@
 package ecosystem;
 
 import boids.behaviours.Behaviour;
-import ca.CellBodyProxy;
 import boids.Boid;
 import boids.DNA;
 import boids.Eye;
@@ -34,7 +33,7 @@ public abstract class Animal extends Boid implements IAnimal{
             this.addBehaviour(b);
         }
         if(a.eye != null){
-            eye = new Eye<>(this, a.eye);
+            eye = new Eye(this, a.eye);
         }
         dna = new DNA(a.dna, mutate);
     }

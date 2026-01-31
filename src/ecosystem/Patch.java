@@ -26,12 +26,14 @@ public class Patch extends MajorityCell {
     }
 
     public void regenerate(Terrain terrain){
+//    	System.out.println(WorldConstants.GROW_TIME_MODIFIERS[terrain.season]);
     	long timestampCheck = eatenTime + timeToGrow + WorldConstants.GROW_TIME_MODIFIERS[terrain.season];
         if(state == WorldConstants.PatchType.FERTILE.ordinal()
                     && System.currentTimeMillis() > timestampCheck){
     		state = WorldConstants.PatchType.FOOD.ordinal();
         }
-
     }
+    
+    
 
 }

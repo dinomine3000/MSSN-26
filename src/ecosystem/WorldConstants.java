@@ -12,32 +12,34 @@ public class WorldConstants {
         EMPTY, OBSTACLE, FERTILE, FOOD, SPOILED
     }
     public enum Season{
-        SUMMER, FALL, WINTER, SPRING
+        FALL, WINTER
     }
-    public static final long[] GROW_TIME_MODIFIERS = {-5000, 0, 5000, 0};
-    public static final float TIME_TO_CHANGE_SEASONS = 30f; // seconds
-    public final static double[] PATCH_TYPE_PROB = {0.35f, 0f, 0f, 0.3f, 0.35f};
+    public static final long[] GROW_TIME_MODIFIERS = {0, 10000, 5000, 0};
+    public static final float TIME_TO_CHANGE_SEASONS = 60f; // seconds
+    public final static double[] PATCH_TYPE_PROB = {0.35f, 0f, 0f, 0.35f, 0.3f};
     public final static int NSTATES = PatchType.values().length;
     public static int[][] TERRAIN_COLORS = {
             {250, 200, 60}, {160, 30, 70}, {200, 200, 60}, {40, 200, 20}, {217, 105, 245}
     };
     
-    public final static float[] REGENERATION_TIME = {5.f, 15.f}; // seconds
+    public static final boolean DO_HIBERNATION = false;
+    public static final float HIBERNATION_WEIGHT_VARIATION = 1f;
+    
+    public final static float[] REGENERATION_TIME = {10.f, 15.f}; // seconds
     public static final float SPOIL_CHANCE = 1f;
-    public static final boolean DO_HIBERNATION = true;
 
     public final static float PREY_SIZE = 0.4f;
     public final static float PREY_MASS = 1.f;
     public final static int INI_PREY_POPULATION = 40;
-    public final static float INI_PREY_ENERGY = 15.f;
+    public final static float INI_PREY_ENERGY = 40.f;
     public final static float ENERGY_FROM_PLANT = 5.f;
-    public final static float PREY_ENERGY_TO_REPRODUCE = 25.f;
+    public final static float PREY_ENERGY_TO_REPRODUCE = 30.f;
     public static final int[] PREY_COLOR = {80, 100, 220};
     
     public final static float SCAV_SIZE = 0.2f;
     public final static float SCAV_MASS = 0.5f;
-    public final static int INI_SCAV_POPULATION = 50;
-    public final static float INI_SCAV_ENERGY = 20.f;
+    public final static int INI_SCAV_POPULATION = 1;
+    public final static float INI_SCAV_ENERGY = 15.f;
     public final static float SCAV_ENERGY_FROM_PLANT = 5.f;
     public final static float SCAV_ENERGY_TO_REPRODUCE = 30.f;
     public static final int[] SCAV_COLOR = {200, 20, 20};

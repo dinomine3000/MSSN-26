@@ -21,12 +21,6 @@ public class Scavenger extends Animal {
     @Override
     public void eat(Terrain terrain){
         Patch patch = (Patch)terrain.world2Cell(pos.x, pos.y);
-        /*
-        if(patch.getState() == WorldConstants.PatchType.FOOD.ordinal()){
-            energy += WorldConstants.SCAV_ENERGY_FROM_PLANT;
-            patch.setFertile();
-        }
-        */
         if(patch.getState() == WorldConstants.PatchType.SPOILED.ordinal()){
             energy += WorldConstants.SCAV_ENERGY_FROM_PLANT;
             patch.setFertile();

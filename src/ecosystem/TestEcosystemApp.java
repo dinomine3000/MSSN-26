@@ -13,18 +13,19 @@ public class TestEcosystemApp implements IProcessingApp {
 	
 	private SubPlot[] pltAuxs = {pltCol1, pltCol2, pltCol3, pltLin1, pltLin2, pltLin3, pltLin4};
 	
-	private float timeDuration = 180f;
+	private float timeDuration = 120f;
     private final float refPopulation = 100f;
-    private final float refHiber = 1f;
-    private final float refVision = 2f;
+    private final float refHiber = 3f;
+    private final float refThreshold = 1f;
+    private final float refVision = 5f;
 
     
-    private final double[] winGraph1 = {0, timeDuration, 0, 2 * refPopulation};
+    private final double[] winGraph1 = {0, timeDuration, 0, 3 * refPopulation};
     private final double[] winGraph2 = {0,timeDuration, 0, 2 * refPopulation};
-    private final double[] winGraph3 = {0,timeDuration, 0, 2 * refHiber};
+    private final double[] winGraph3 = {0,timeDuration, 0, 2 * refThreshold};
     private final double[] winGraph4 = {0,timeDuration, 0, 2 * refHiber};
     private final double[] winGraph5 = {0,timeDuration, 0, 2 * refHiber};
-    private final double[] winGraph6 = {0,timeDuration, 0, 2 * refVision};
+    private final double[] winGraph6 = {0,timeDuration, 0, 2 * refThreshold};
     
     private final double[] winSect= {0, 2, 0, 2};
     
@@ -36,7 +37,7 @@ public class TestEcosystemApp implements IProcessingApp {
 	private float timer, updateGraphTime;
 	private float intervalUpdate = 1;
 	
-	private boolean tickSeasons = false;
+	private boolean tickSeasons = true;
 
 	@Override
 	public void setup(PApplet p) {
@@ -63,10 +64,10 @@ public class TestEcosystemApp implements IProcessingApp {
 
 		t1 = new TimeGraph(p, pltG1, p.color(255, 0, 0), refPopulation);
 		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), refPopulation);
-		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), refHiber);
+		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), refThreshold);
 		t4 = new TimeGraph(p, pltG4, p.color(255, 0, 0), refHiber);
 		t5 = new TimeGraph(p, pltG5, p.color(255, 0, 0), refHiber);
-		t6 = new TimeGraph(p, pltG6, p.color(255, 0, 0), refVision);
+		t6 = new TimeGraph(p, pltG6, p.color(255, 0, 0), refThreshold);
 		
 		terrain = new Terrain(p, plt);
 		terrain.setStateColors(getColors(p));
@@ -109,27 +110,33 @@ public class TestEcosystemApp implements IProcessingApp {
 
 			int popPrey = population.getNumAnimals(preyId);
 			int popScav = population.getNumAnimals(scavId);
+//			float preySmell = population.getMeanSmell(preyId);
+//			float scavSmell = population.getMeanSmell(scavId);
+//			float preySd = population.getSdSmell(preyId, preySmell);
+//			float scavSd = population.getSdSmell(scavId, scavSmell);
 			float[] paramMean = population.getMeanWeights();
-			float visionMean = population.getMeanVisionSafeDistance();
-			float hiberLimiar = population.getLimiar(1);
-			float hiberDesvP = population.getDesvioPadrao(1);
-			float visionLimiar = population.getLimiar(2);
-			float visionDesvP = population.getDesvioPadrao(2);
+			float[] paramSd = population.getSdWeights(paramMean);
+//			float visionMean = population.getMeanVisionSafeDistance();
+			float limiarMean = population.getMean(1);
+			float limiarSd = population.getDesvioPadrao(1);
+//			float visionLimiar = population.getLimiar(2);
+//			float visionDesvP = population.getDesvioPadrao(2);
 			
 			System.out.println(String.format("Time = %ds", (int)timer));
 			System.out.println("number of prey = " + popPrey + "\nnumber of scavengers = " + popScav);
-			System.out.println("media peso hibernação = " + paramMean[1] + "\nmedia dist visão = " + visionMean);
-			System.out.println("limiar hibernação= " + hiberLimiar + "\nlimiar visão = " + visionLimiar);
-			System.out.println("desvio padrao hibernação= " + hiberDesvP + "\ndesvio padrao visão = " + visionDesvP);
-			System.out.println("");
+			if(WorldConstants.DO_HIBERNATION) {
+				System.out.println("hibernation weight mean = " + paramMean[1] + "\nhibernation weight sd= " + paramSd[1]);
+				System.out.println("threshold mean = " + limiarMean + "\nthreshold sd = " + limiarSd);
+			}
 			
 			t1.plot(timer,  popPrey);
 			t2.plot(timer,  popScav);
-			t3.plot(timer,  paramMean[1]);
-			t4.plot(timer,  hiberLimiar);
-			t5.plot(timer,  hiberDesvP);
-			t6.plot(timer,  visionMean);
-			
+			if(WorldConstants.DO_HIBERNATION) {
+				t3.plot(timer,  limiarMean);
+				t4.plot(timer,  paramMean[1]);
+				t5.plot(timer,  paramSd[1]);
+				t6.plot(timer,  limiarSd);
+			}
 			updateGraphTime = timer + intervalUpdate;
 		}
 		
@@ -149,11 +156,13 @@ public class TestEcosystemApp implements IProcessingApp {
 		}
 		drawText(p, "Number of Prey:", 518, 35);
 		drawText(p, "Number of Scavangers:", 518, 215);
-		drawText(p, "HiberWeight Mean:", 518, 395);
-		drawText(p, "HiberWeight Threshold:", 878, 35);
-		drawText(p, "HiberWeight StandDiv:", 878, 215);
-		drawText(p, "VisionSafeDist Mean:", 878, 395);
+		if(!WorldConstants.DO_HIBERNATION) return;
+		drawText(p, "Hibernation Threshold Mean:", 518, 395);
+		drawText(p, "Hibernation Weight Mean:", 878, 35);
+		drawText(p, "Hibernation Weight Sd:", 878, 215);
+		drawText(p, "Hibernation Threshold Sd:", 878, 395);	
 	}
+
 	
 	private void drawText(PApplet p, String text, int x, int y) {
 		p.textSize(25);
@@ -172,8 +181,8 @@ public class TestEcosystemApp implements IProcessingApp {
 	public String getSeasonFromOrdinal(int season) {
         if (season == WorldConstants.Season.FALL.ordinal()) {return "Fall";}
         if (season == WorldConstants.Season.WINTER.ordinal()) {return "Winter";}
-        if (season == WorldConstants.Season.SPRING.ordinal()) {return "Spring";}
-        if (season == WorldConstants.Season.SUMMER.ordinal()) {return "Summer";}
+//        if (season == WorldConstants.Season.SPRING.ordinal()) {return "Spring";}
+//        if (season == WorldConstants.Season.SUMMER.ordinal()) {return "Summer";}
 
         return "Fall";
 	}
@@ -197,29 +206,30 @@ public class TestEcosystemApp implements IProcessingApp {
 		pltG2 = SubPlot.getPlotAt(p, 0.425f, 0.4f, 0.6875f, 0.6f, winGraph2);
 		t2 = new TimeGraph(p, pltG2, p.color(255, 0, 0), population.getNumAnimals(WorldConstants.SCAV_ID));
 		
+		if(!WorldConstants.DO_HIBERNATION) return;
 		winGraph3[0] = timer;
 		winGraph3[1] = timer + timeDuration;
-		winGraph3[3] = 2*population.getMeanWeights()[1];
+		winGraph3[3] = 2*population.getMean(1);
 		pltG3 = SubPlot.getPlotAt(p, 0.425f, 0.7f, 0.6875f, 0.9f, winGraph3);
-		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), population.getMeanWeights()[1]);
+		t3 = new TimeGraph(p, pltG3, p.color(255, 0, 0), population.getMean(1));
 		
 		winGraph4[0] = timer;
 		winGraph4[1] = timer + timeDuration;
-		winGraph4[3] = 2*population.getLimiar(1);
+		winGraph4[3] = 2*population.getMeanWeights()[1];
 		pltG4 = SubPlot.getPlotAt(p, 0.7125f, 0.1f, 0.975f, 0.3f, winGraph4);
-		t4 = new TimeGraph(p, pltG4, p.color(255, 0, 0), population.getLimiar(1));
+		t4 = new TimeGraph(p, pltG4, p.color(255, 0, 0), population.getMeanWeights()[1]);
 		
 		winGraph5[0] = timer;
 		winGraph5[1] = timer + timeDuration;
-		winGraph5[3] = 2*population.getDesvioPadrao(1);
+		winGraph5[3] = 2*population.getSdWeights()[1];
 		pltG5 = SubPlot.getPlotAt(p, 0.7125f, 0.4f, 0.975f, 0.6f, winGraph5);
-		t5 = new TimeGraph(p, pltG5, p.color(255, 0, 0), population.getDesvioPadrao(1));
+		t5 = new TimeGraph(p, pltG5, p.color(255, 0, 0), population.getSdWeights()[1]);
 		
 		winGraph6[0] = timer;
 		winGraph6[1] = timer + timeDuration;
-		winGraph6[3] = 2*population.getMeanVisionSafeDistance();
+		winGraph6[3] = 2*population.getDesvioPadrao(1);
 		pltG6 = SubPlot.getPlotAt(p, 0.7125f, 0.7f, 0.975f, 0.9f, winGraph6);
-		t6 = new TimeGraph(p, pltG6, p.color(255, 0, 0), population.getMeanVisionSafeDistance());
+		t6 = new TimeGraph(p, pltG6, p.color(255, 0, 0), population.getDesvioPadrao(1));
 	}
 
 	@Override

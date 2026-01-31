@@ -3,18 +3,19 @@ package boids;
 import java.util.ArrayList;
 import java.util.List;
 
+import ecosystem.CellBodyProxy;
 import physics.Body;
 import processing.core.PVector;
 
-public class Eye<T extends Body> {
+public class Eye {
 
-    private List<T> trackBodies;
-    private List<T> farSight;
-    private List<T> nearSight;
+    private List<CellBodyProxy> trackBodies;
+    private List<Body> farSight;
+    private List<Body> nearSight;
     private Boid me;
-    public T target;
+    public Body target;
 
-    public Eye(Boid me, List<? extends T> trackBodies) {
+    public Eye(Boid me, List<CellBodyProxy> trackBodies) {
         this.me = me;
         this.trackBodies = new ArrayList<>(trackBodies);
         if (!this.trackBodies.isEmpty()) {
@@ -22,7 +23,7 @@ public class Eye<T extends Body> {
         }
     }
 
-    public Eye(Boid me, Eye<T> other) {
+    public Eye(Boid me, Eye other) {
         this(me, other.trackBodies);
         this.target = other.target;
     }
@@ -30,7 +31,7 @@ public class Eye<T extends Body> {
     public void look() {
         farSight = new ArrayList<>();
         nearSight = new ArrayList<>();
-        for (T b : trackBodies) {
+        for (Body b : trackBodies) {
             if (farSight(b.getPos())) {
                 farSight.add(b);
             }
@@ -40,11 +41,11 @@ public class Eye<T extends Body> {
         }
     }
 
-    public List<T> getFarSight() {
+    public List<Body> getFarSight() {
         return farSight;
     }
 
-    public List<T> getNearSight() {
+    public List<Body> getNearSight() {
         return nearSight;
     }
 

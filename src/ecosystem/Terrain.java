@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ca.CellBodyProxy;
 import ca.MajorityCa;
 import hello.SubPlot;
 import physics.Body;
@@ -50,16 +49,16 @@ public class Terrain extends MajorityCa {
         }
 
         if (currentSeason == WorldConstants.Season.WINTER.ordinal()) {
-            return WorldConstants.Season.SPRING.ordinal();
-        }
-
-        if (currentSeason == WorldConstants.Season.SPRING.ordinal()) {
-            return WorldConstants.Season.SUMMER.ordinal();
-        }
-
-        if (currentSeason == WorldConstants.Season.SUMMER.ordinal()) {
             return WorldConstants.Season.FALL.ordinal();
         }
+
+//        if (currentSeason == WorldConstants.Season.SPRING.ordinal()) {
+//            return WorldConstants.Season.SUMMER.ordinal();
+//        }
+//
+//        if (currentSeason == WorldConstants.Season.SUMMER.ordinal()) {
+//            return WorldConstants.Season.FALL.ordinal();
+//        }
 
         return WorldConstants.Season.FALL.ordinal();
     }
@@ -81,11 +80,11 @@ public class Terrain extends MajorityCa {
         p.noStroke();
 
         float[] window = this.plt.getBoundingBox();
-        if (season == WorldConstants.Season.SUMMER.ordinal()) {
-            // yellow tint
-            p.fill(255, 255, 0, 60); // RGBA, low alpha
-            p.rect(window[0], window[1], window[2], window[3]);
-        }
+//        if (season == WorldConstants.Season.SUMMER.ordinal()) {
+//            // yellow tint
+//            p.fill(255, 255, 0, 60); // RGBA, low alpha
+//            p.rect(window[0], window[1], window[2], window[3]);
+//        }
 
         if (season == WorldConstants.Season.WINTER.ordinal()) {
             // blue tint
@@ -97,11 +96,11 @@ public class Terrain extends MajorityCa {
     }
     
     public List<CellBodyProxy> getCells(int patchType){
-    	List<CellBodyProxy> bodies = new ArrayList<CellBodyProxy>();
+    	List<CellBodyProxy> bodies = new ArrayList<>();
     	for(int i = 0; i < nrows; i++) {
     		for(int j = 0; j < ncols; j++) {
     			if(cells[i][j].getState() == patchType) {
-    				CellBodyProxy b = new CellBodyProxy(this.getCenterCell(i, j), patchType);
+    				CellBodyProxy b = new CellBodyProxy((Patch) cells[i][j]);
     				bodies.add(b);
     			}
     		}

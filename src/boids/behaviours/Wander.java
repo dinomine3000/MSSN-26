@@ -20,7 +20,8 @@ public class Wander extends Behaviour {
 		target.add(center);
 		
 		me.phiWander += 2*(Math.random()-0.5)*me.dna.deltaPhiWander;
-		return PVector.sub(target, me.getPos()).mult(me.dna.maxSpeed);
+		PVector vd = PVector.sub(target, me.getPos()).mult(me.dna.maxSpeed);
+		return vd;
 	}
 
 }

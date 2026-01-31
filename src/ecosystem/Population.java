@@ -5,9 +5,10 @@ import java.util.List;
 
 import boids.Eye;
 import boids.behaviours.AvoidObstacle;
-import boids.behaviours.ConditionalBrake;
+import boids.behaviours.ConditionalBrakeFood;
+import boids.behaviours.ConditionalBrakeSpoiled;
+import boids.behaviours.Smell;
 import boids.behaviours.Wander;
-import ca.CellBodyProxy;
 import hello.SubPlot;
 import physics.Body;
 import processing.core.PApplet;
@@ -27,8 +28,9 @@ public class Population {
 		window = plt.getWindow();
 		allAnimals = new ArrayList<Animal>();
 
-		List<CellBodyProxy> spoiledFood = terrain.getCells(WorldConstants.PatchType.SPOILED.ordinal());
-		List<CellBodyProxy> food = terrain.getCells(WorldConstants.PatchType.FOOD.ordinal());
+		List<CellBodyProxy> food = terrain.getCells(WorldConstants.PatchType.SPOILED.ordinal());
+		food.addAll(terrain.getCells(WorldConstants.PatchType.FOOD.ordinal()));
+		food.addAll(terrain.getCells(WorldConstants.PatchType.FERTILE.ordinal()));
 
 		for(int i = 0; i < WorldConstants.INI_PREY_POPULATION; i++) {
 			PVector pos = new PVector(p.random((float)window[0], (float)window[1]),
@@ -40,8 +42,8 @@ public class Population {
 			Animal a = new Herbivore(pos, WorldConstants.PREY_MASS, WorldConstants.PREY_SIZE, color, p, plt, WorldConstants.PREY_ID);
 			a.addBehaviour(new Wander(1));
 			if(WorldConstants.DO_HIBERNATION) {
-				a.addBehaviour(new ConditionalBrake(1));
-				Eye<CellBodyProxy> eye = new Eye<>(a, food);
+				a.addBehaviour(new ConditionalBrakeFood(3));
+				Eye eye = new Eye(a, food);
 				a.setEye(eye);
 			}
 			a.setImage(imgRabbit);
@@ -59,8 +61,8 @@ public class Population {
 			Animal a = new Scavenger(pos, WorldConstants.SCAV_MASS, WorldConstants.SCAV_SIZE, color, p, plt, WorldConstants.SCAV_ID);
 			a.addBehaviour(new Wander(1));
 			if(WorldConstants.DO_HIBERNATION) {
-				a.addBehaviour(new ConditionalBrake(1));
-				Eye<CellBodyProxy> eye = new Eye<>(a, spoiledFood);
+				a.addBehaviour(new ConditionalBrakeSpoiled(3));
+				Eye eye = new Eye(a, food);
 				a.setEye(eye);
 			}
 			//a.addBehaviour(new AvoidObstacle(0));
@@ -118,19 +120,35 @@ public class Population {
 		return getAnimalsOfId(id).size();
 	}
 
+	public float[] getSdWeights() {
+		return getSdWeights(getMeanWeights());
+	}
+	public float[] getSdWeights(float[] means) {
+		float[] sums = new float[2];
+		for(Animal a: allAnimals) {
+			sums[0] += Math.pow(a.getBehaviours().get(0).getWeight() - means[0], 2);
+			sums[1] += WorldConstants.DO_HIBERNATION ? Math.pow(a.getBehaviours().get(1).getWeight() - means[1], 2) : 0;
+		}
+		System.out.println(allAnimals.size());
+		sums[0] /= allAnimals.size();
+		sums[1] /= allAnimals.size();
+		sums[0] = (float) Math.sqrt(sums[0]);
+		sums[1] = (float) Math.sqrt(sums[1]);
+		return sums;
+	}
 	
 	public float[] getMeanWeights() {
 		float[] sums = new float[2];
 		for(Animal a: allAnimals) {
 			sums[0] += a.getBehaviours().get(0).getWeight();
-			sums[1] += a.getBehaviours().get(1).getWeight();
+			sums[1] += WorldConstants.DO_HIBERNATION ? a.getBehaviours().get(1).getWeight() : 0;
 		}
 		sums[0] /= allAnimals.size();
 		sums[1] /= allAnimals.size();
 		return sums;
 	}
 
-	public float getLimiar(int paramId) {
+	public float getMean(int paramId) {
 		if(allAnimals.isEmpty()) return 0;
 		
 	    float sum = 0;
@@ -154,7 +172,7 @@ public class Population {
 	public float getDesvioPadrao(int paramId) {
 	    if(allAnimals.isEmpty()) return 0;
 
-		float mean = this.getLimiar(paramId);
+		float mean = this.getMean(paramId);
 	    float sum = 0;
 	    for(Animal a : allAnimals) {
 	    	switch (paramId) {

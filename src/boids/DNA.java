@@ -1,5 +1,7 @@
 package boids;
 
+import ecosystem.WorldConstants;
+
 public class DNA {
 	public float maxSpeed;
 	public float maxForce;
@@ -13,6 +15,7 @@ public class DNA {
 	public float deltaPhiWander;
 	
 	public int hibernationThreshold;
+	public int smellStrength;
 	
 	
 	public DNA() {
@@ -20,8 +23,8 @@ public class DNA {
 		maxSpeed = random(1f, 2f);
 		maxForce = random(4f, 7f);
 		//vision
-		visionDistance = random(3.f, 5.f);
-		visionSafeDistance = 0.5f * visionDistance;
+		visionDistance = random(100.f, 1000.f);
+		visionSafeDistance = 15;
 		visionAngle = (float)Math.PI * 0.3f;
 		//pursuit
 		deltaTPursuit = random(0.5f, 1f);
@@ -32,7 +35,9 @@ public class DNA {
 		radiusWander = random(1f, 3f);
 		deltaPhiWander = (float)Math.PI/8;
 
-		hibernationThreshold = (int) random(1, 10);
+		smellStrength = Math.random() < 0.5 ? 3 : -3;
+		
+		hibernationThreshold = (int)random(5, 8);
 	}
 	
 	public DNA(DNA dna, boolean mutate) {
@@ -50,18 +55,18 @@ public class DNA {
 		deltaPhiWander = dna.deltaPhiWander;
 		radiusWander = dna.radiusWander;
 
-		this.hibernationThreshold = dna.hibernationThreshold;
 		if(mutate) mutate();
 	}
 	
 	private void mutate() {
-		maxSpeed += random(-0.2f, 0.2f);
-		maxSpeed = Math.max(0, maxSpeed);
-
-		visionSafeDistance += random(-1f, 1f);
-		visionSafeDistance = Math.max(1, visionSafeDistance);
-
-		hibernationThreshold += (int)(random(-10, 10));
+//		maxSpeed += random(-0.2f, 0.2f);
+//		maxSpeed = Math.max(0, maxSpeed);
+//
+//		visionSafeDistance += random(-1f, 1f);
+//		visionSafeDistance = Math.max(1, visionSafeDistance);
+//
+		if(!WorldConstants.DO_HIBERNATION) return;
+		hibernationThreshold += (int)(random(-2, 2));
 		hibernationThreshold = Math.max(hibernationThreshold, 0);
 	}
 

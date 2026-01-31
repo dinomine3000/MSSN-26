@@ -5,8 +5,13 @@ import java.util.List;
 
 import boids.behaviours.AvoidObstacle;
 import boids.behaviours.Behaviour;
-import boids.behaviours.ConditionalBrake;
+import boids.behaviours.ConditionalBrakeFood;
+import boids.behaviours.ConditionalBrakeSpoiled;
+import boids.behaviours.PursuitFood;
+import boids.behaviours.PursuitSpoiled;
+import boids.behaviours.Smell;
 import boids.behaviours.Wander;
+import ecosystem.WorldConstants;
 import hello.SubPlot;
 import physics.Body;
 import processing.core.PApplet;
@@ -19,7 +24,7 @@ public class Boid extends Body{
 	private SubPlot plt;
 	private PShape shape;
 	public DNA dna;
-	public Eye<? extends Body> eye;
+	public Eye eye;
 	protected List<Behaviour> behaviours;
 	public float phiWander;
 	private double[] window;
@@ -37,7 +42,7 @@ public class Boid extends Body{
 		behaviours = new ArrayList<Behaviour>();
 	}
 	
-	public void setEye(Eye<? extends Body> eye) {
+	public void setEye(Eye eye) {
 		this.eye = eye;
 	}
 
@@ -102,20 +107,20 @@ public class Boid extends Body{
 	public void applyBehaviours(float dt) {
         if (eye != null) eye.look();
         PVector vd = new PVector();
-        int sum = 0;
+        float sum = 0;
         for (Behaviour behavior : behaviours) {
-        	if(!behavior.isActive(this)) continue;
             PVector vdd = behavior.getDesiredVelocity(this);
             sum += behavior.getWeight();
-            vdd.mult(behavior.getWeight());
-            vd.add(vdd);
+            vdd = vdd.mult(behavior.getWeight());
+            vd = vd.add(vdd);
         }
         move(dt, vd.mult(1/sum));
 	}
 	
 	private void move(float dt, PVector vd) {
-//        vd.normalize().mult(dna.maxSpeed);
-		if(vd.mag() > dna.maxSpeed) vd.normalize().mult(dna.maxSpeed);
+        vd = vd.normalize().mult(dna.maxSpeed);
+        System.out.println(vd.mag());
+//		if(vd.mag() > dna.maxSpeed) vd = vd.normalize().mult(dna.maxSpeed);
         PVector fs = PVector.sub(vd, vel);
         applyForce(fs.limit(dna.maxForce));
         super.move(dt);
@@ -149,8 +154,8 @@ public class Boid extends Body{
 
 	public void mutateBehaviours() {
 		for(Behaviour b: behaviours) {
-			if(b instanceof ConditionalBrake) {
-				b.weight += DNA.random(-0.2f, 0.2f);
+			if(b instanceof PursuitFood || b instanceof PursuitSpoiled) {
+				b.weight += DNA.random(-WorldConstants.HIBERNATION_WEIGHT_VARIATION, WorldConstants.HIBERNATION_WEIGHT_VARIATION);
 				b.weight = Math.max(0,  b.weight);
 			}
 		}
